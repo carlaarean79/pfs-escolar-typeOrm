@@ -13,7 +13,7 @@ import { LoginModule } from './login/login.module';
 import { EscuelaModule } from './escuela/escuela.module';
 import { DireccionProfesorModule } from './direccion-profesor/direccion-profesor.module';
 import { DireccionEstudianteModule } from './direccion-estudiante/direccion-estudiante.module';
-@Module({
+@Module({       
   imports: [
     ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'app') }),
     TypeOrmModule.forRoot({

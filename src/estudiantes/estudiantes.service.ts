@@ -12,7 +12,7 @@ constructor(@InjectRepository(Estudiante) private readonly estudianteRepository:
 
 async create(createEstudianteDto: CreateEstudianteDto) {
   const createEstudiantes = [];
-  for (let i = 0; i < 10; i++) {
+ 
     // Crea un nuevo objeto createEstudianteDto para cada estudiante
     const newEstudianteDto = new CreateEstudianteDto();
     newEstudianteDto.nombre = createEstudianteDto.nombre;
@@ -22,9 +22,9 @@ async create(createEstudianteDto: CreateEstudianteDto) {
     const newEstudiante = this.estudianteRepository.create(newEstudianteDto);
     const savedEstudiante = await this.estudianteRepository.save(newEstudiante);
     createEstudiantes.push(savedEstudiante);
+    return createEstudiantes;
   }
-  return createEstudiantes;
-}
+
 
 async findAll(): Promise<Estudiante[]> {
   return this.estudianteRepository.find();

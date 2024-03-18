@@ -13,6 +13,7 @@ import { LoginModule } from './login/login.module';
 import { EscuelaModule } from './escuela/escuela.module';
 import { DireccionProfesorModule } from './direccion-profesor/direccion-profesor.module';
 import { DireccionEstudianteModule } from './direccion-estudiante/direccion-estudiante.module';
+
 @Module({       
   imports: [
     ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'app') }),
@@ -24,7 +25,7 @@ import { DireccionEstudianteModule } from './direccion-estudiante/direccion-estu
     password: 'root',
     database: 'escolar',
     entities: [__dirname + '/../**/*.entity.js'],
-    synchronize: true
+    synchronize: false
   }), CiudadModule, EstudiantesModule, ProfesorModule, AsistenciaModule, ClaseModule, LoginModule, EscuelaModule, DireccionProfesorModule, DireccionEstudianteModule],
   controllers: [AppController],
   providers: [AppService],

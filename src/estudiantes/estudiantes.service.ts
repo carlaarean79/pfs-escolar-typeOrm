@@ -17,9 +17,9 @@ async create(createEstudianteDto: CreateEstudianteDto) {
    // Crea un nuevo objeto createEstudianteDto para cada estudiante
    
    const newEstudiante = this.estudianteRepository.create(createEstudianteDto);// se le pasa el obj a través de la dto
-   const savedEstudiante = await this.estudianteRepository.save(newEstudiante);
+  return await this.estudianteRepository.save(newEstudiante);
    
-   return [savedEstudiante];
+   
   } catch {throw new Error('Estudiante no creado. Verifique los datos e intente nuevamente')}
   }
 
@@ -28,15 +28,19 @@ async findAll(): Promise<Estudiante[]> {
   return this.estudianteRepository.find();
 }
 
-  findOne(id: number) {
-    return `This action returns a #${id} estudiante`;
+  async findOne(id: number) {
+    return await this.estudianteRepository.findOne({
+      where: {
+        idEstudiante: id
+      }
+    });
   }
 
-  update(id: number, updateEstudianteDto: UpdateEstudianteDto) {
-    return `This action updates a #${id} estudiante`;
+  async update(id: number, updateEstudianteDto: UpdateEstudianteDto) {
+    return await this.estudianteRepository.update(id, updateEstudianteDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} estudiante`;
+    return this.estudianteRepository.delete(id)
   }
 }

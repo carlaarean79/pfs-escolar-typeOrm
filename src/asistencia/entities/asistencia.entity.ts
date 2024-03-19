@@ -11,7 +11,7 @@ public clase: string;
 @Column({length: 50})
 public estudiante: string;
 
-@Column({type: 'datetime', default: () => 'CURRENT_TIMESTAMP'})
+@Column('datetime')
 public fecha: Date;
 
 

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, Query, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, Query, ParseIntPipe, HttpStatus } from '@nestjs/common';
 import { EstudiantesService } from './estudiantes.service';
 import { CreateEstudianteDto } from './dto/create-estudiante.dto';
 import { UpdateEstudianteDto } from './dto/update-estudiante.dto';
@@ -27,9 +27,10 @@ export class EstudiantesController {
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateEstudianteDto: UpdateEstudianteDto) {
-    return this.estudiantesService.update(+id, updateEstudianteDto);
+  update(@Param('id',new ParseIntPipe({errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE})) id: number, @Body() updateEstudianteDto: UpdateEstudianteDto) {
+    return this.estudiantesService.update(id, updateEstudianteDto);
   }
+ 
 
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {

@@ -9,10 +9,10 @@ import { EstudiantesModule } from './estudiantes/estudiantes.module';
 import { ProfesorModule } from './profesor/profesor.module';
 import { AsistenciaModule } from './asistencia/asistencia.module';
 import { ClaseModule } from './clase/clase.module';
-import { LoginModule } from './login/login.module';
 import { EscuelaModule } from './escuela/escuela.module';
 import { DireccionProfesorModule } from './direccion-profesor/direccion-profesor.module';
 import { DireccionEstudianteModule } from './direccion-estudiante/direccion-estudiante.module';
+
 @Module({       
   imports: [
     ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'app') }),
@@ -25,7 +25,7 @@ import { DireccionEstudianteModule } from './direccion-estudiante/direccion-estu
     database: 'escolar',
     entities: [__dirname + '/../**/*.entity.js'],
     synchronize: false
-  }), CiudadModule, EstudiantesModule, ProfesorModule, AsistenciaModule, ClaseModule, LoginModule, EscuelaModule, DireccionProfesorModule, DireccionEstudianteModule],
+  }), CiudadModule, EstudiantesModule, ProfesorModule, AsistenciaModule, ClaseModule, EscuelaModule, DireccionProfesorModule, DireccionEstudianteModule],
   controllers: [AppController],
   providers: [AppService],
 })

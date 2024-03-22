@@ -6,10 +6,21 @@ export class Ciudad {
     private idCiudad: number
 
     @Column({length: 50})
-    public Nombre: string
+    private Nombre: string
 
     @Column('int')
-    public CodigoPostal: number
+    private CodigoPostal: number
+    
+    constructor(nombre:string, cp:number){
+        this.Nombre=nombre;
+        this.CodigoPostal=cp;
+    }
 
+    public getIdCiudad():number {return this.idCiudad; }
+    public getNombre():string {return this.Nombre; }
+    public getCodigoPostal():number {return this.CodigoPostal; }
+    
+    public setNombre(nombre:string):void {this.Nombre=nombre; }
+    public setCodigoPostal(cp:number):void {this.CodigoPostal=cp; }
     
 }

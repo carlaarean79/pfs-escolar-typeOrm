@@ -10,7 +10,7 @@ export class EstudiantesController {
 
   @Post()
   @HttpCode(201)
-  create(@Body() createEstudianteDto: CreateEstudianteDto): Promise<Estudiante> {
+  create(@Body() createEstudianteDto: CreateEstudianteDto): Promise<Estudiante[]> {
     return this.estudiantesService.create(createEstudianteDto);
   }
  

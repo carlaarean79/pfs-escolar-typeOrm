@@ -9,9 +9,9 @@ import { Repository } from 'typeorm';
 export class EstudiantesService {
 
  
-constructor(@InjectRepository(Estudiante) private readonly estudianteRepository: Repository<Estudiante>){}
-
-async create(createEstudianteDto: CreateEstudianteDto) {
+ constructor(@InjectRepository(Estudiante) private readonly estudianteRepository: Repository<Estudiante>){}
+ 
+ async create(createEstudianteDto: CreateEstudianteDto) {
   const createEstudiantes = [];
   
     // Crea un nuevo objeto createEstudianteDto para cada estudiante
@@ -25,22 +25,7 @@ async create(createEstudianteDto: CreateEstudianteDto) {
     createEstudiantes.push(savedEstudiante);
   
   return createEstudiantes;
-}
-private estudiantes: Estudiante[]=[]
-  constructor(@InjectRepository(Estudiante) private readonly estudianteRepository: Repository<Estudiante>) { }
-
-  async create(createEstudianteDto: CreateEstudianteDto): Promise<Estudiante> {
-
-
-    try {
-      // Crea un nuevo objeto createEstudianteDto para cada estudiante
-      const newEstudiante = this.estudianteRepository.create(createEstudianteDto);// se le pasa el obj a través de la dto
-      return await this.estudianteRepository.save(newEstudiante); 
-
-      } catch (error) { throw new HttpException('No se pudo crear el nuevo estudiante. Por favor verifique los datos',HttpStatus.BAD_REQUEST,{cause: error.message})}
-//"apellite": "juarez", lo toma como error me devuelve mensaje No se pudo crear el nuevo estudiante...
-//"ciudad":"", si le agrego un atributo inexistente no lo crea, sí el resto  
-}
+} 
 
 
   async findAll(): Promise<Estudiante[]> {

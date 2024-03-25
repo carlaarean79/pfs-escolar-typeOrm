@@ -23,11 +23,11 @@ private estudiantes: Estudiante[]=[]
 }
 
 
-  async findAll(): Promise<Estudiante[]> {
+  async getAll(): Promise<Estudiante[]> {
     return this.estudianteRepository.find();
   }
 
-  async findOne(id: number) {
+  async getEstudianteById(id: number) {
     return await this.estudianteRepository.findOne({
       where: {
         idEstudiante: id
@@ -35,9 +35,7 @@ private estudiantes: Estudiante[]=[]
     });
   }
 
- /*  async update(id: number, updateEstudianteDto: UpdateEstudianteDto) {
-    return await this.estudianteRepository.update(id, updateEstudianteDto);
-  } */
+
   async  update(idEstudiante: number, updateEstudianteDto: UpdateEstudianteDto): Promise<Estudiante> {
     try {
       const estudiante = await this.estudianteRepository.findOne({where:{idEstudiante}});
@@ -50,7 +48,7 @@ private estudiantes: Estudiante[]=[]
       estudiante.nombre = updateEstudianteDto.nombre !== undefined ? updateEstudianteDto.nombre : estudiante.nombre;
       estudiante.apellido = updateEstudianteDto.apellido !== undefined ? updateEstudianteDto.apellido : estudiante.apellido;
       estudiante.edad = updateEstudianteDto.edad !== undefined ? updateEstudianteDto.edad : estudiante.edad;
-
+ 
       // Guardar los cambios en la base de datos
       return await this.estudianteRepository.save(estudiante);
     } catch (error) {
@@ -63,7 +61,7 @@ private estudiantes: Estudiante[]=[]
 
 
 
-  remove(id: number) {
+  deleteEstudiante(id: number) {
     return this.estudianteRepository.delete(id)
   }
 }

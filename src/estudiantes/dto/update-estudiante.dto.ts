@@ -4,7 +4,7 @@ import { IsNumber, IsString } from 'class-validator';
 
 export class UpdateEstudianteDto extends PartialType(CreateEstudianteDto) {
     @IsNumber()
-    idEstudiante?: number;
+    idEstudiante: number;
 
     @IsString()
     nombre?: string;

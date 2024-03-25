@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, Query, ParseIntPipe, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, HttpCode, Query, ParseIntPipe, HttpStatus} from '@nestjs/common';
 import { EstudiantesService } from './estudiantes.service';
 import { CreateEstudianteDto } from './dto/create-estudiante.dto';
 import { UpdateEstudianteDto } from './dto/update-estudiante.dto';
@@ -16,24 +16,24 @@ export class EstudiantesController {
  
   @Get()
   @HttpCode(200)
-   findAll(): Promise<Estudiante[]> {
-      return this.estudiantesService.findAll();
+   getAll(): Promise<Estudiante[]> {
+      return this.estudiantesService.getAll();
     }
   
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id:number ):Promise<Estudiante>{
-    return this.estudiantesService.findOne(id);
+  getEstudianteById(@Param('id', ParseIntPipe) id:number ):Promise<Estudiante>{
+    return this.estudiantesService.getEstudianteById(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id',new ParseIntPipe({errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE})) id: number, @Body() updateEstudianteDto: UpdateEstudianteDto) {
     return this.estudiantesService.update(id, updateEstudianteDto);
   }
  
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.estudiantesService.remove(id);
+  deleteEstudiante(@Param('id', ParseIntPipe) id: number) {
+    return this.estudiantesService.deleteEstudiante(id);
   }
 }

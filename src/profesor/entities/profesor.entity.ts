@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Clase } from "src/clase/entities/clase.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('profesores')
 export class Profesor {
@@ -13,6 +14,10 @@ export class Profesor {
 
     @Column({length:50})
     public departamento:string;
+
+    @OneToMany(()=>Clase, clase=>clase.profesor)
+    clase : Clase[];
+
 
     //fk ciudad
     //fk direccion

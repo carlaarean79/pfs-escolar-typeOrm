@@ -9,26 +9,26 @@ export class EscuelaController {
 
   @Post()
   create(@Body() createEscuelaDto: CreateEscuelaDto) {
-    return this.escuelaService.create(createEscuelaDto);
+    return this.escuelaService.crearEscuela(createEscuelaDto);
   }
 
   @Get()
   findAll() {
-    return this.escuelaService.findAll();
+    return this.escuelaService.getEscuelaAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.escuelaService.findOne(+id);
+    return this.escuelaService.getEscuelaById(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEscuelaDto: UpdateEscuelaDto) {
-    return this.escuelaService.update(+id, updateEscuelaDto);
+  update(@Param('id') id: string, @Body() createEscuelaDto: CreateEscuelaDto) {
+    return this.escuelaService.actualizarEscuela(+id, createEscuelaDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.escuelaService.remove(+id);
+    return this.escuelaService.eliminarEscuela(+id);
   }
 }

@@ -24,9 +24,9 @@ export class CiudadController {
 
   @Put(':id')
   actualizarCiudad(
-    @Param('idCiudad') id: number, 
+    @Param('id') id: number, 
     @Body() ciudadDto: CreateCiudadDto): Promise<Ciudad> {
-    return this.ciudadService.uodeateCiudad(+id, ciudadDto);
+    return this.ciudadService.actualizarCiudad(+id, ciudadDto);
   }
 
   @Delete(':id')

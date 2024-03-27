@@ -11,46 +11,35 @@ export class EstudiantesService {
  
  constructor(@InjectRepository(Estudiante) private readonly estudianteRepository: Repository<Estudiante>){}
  
-public async createEstudiante(createEstudiante: CreateEstudianteDto): Promise<Estudiante>{
-  try{
-    let estudiante: Estudiante = await this.estudianteRepository.save(
-      new Estudiante(createEstudiante.nombre, createEstudiante.apellido,createEstudiante.edad)
-    )
-    if(estudiante)
-    return estudiante;
-  else 
-  throw new NotFoundException("No se pudo crear el nuevo estudiante. Verifique los datos ingresados e intente nuevamente")
-  } catch (error){
-    throw new HttpException({status:HttpStatus.NOT_FOUND,
-    error: `Error al implementar la acción para crear al nuevo estudiante`+error},-HttpStatus.NOT_FOUND)
-
+ public async createEstudiante(datos: CreateEstudianteDto):Promise<Estudiante> {
+  try {
+    let estudiante : Estudiante;
+    if (datos)
+        if (datos.nombre && datos.apellido && datos.edad) {
+            estudiante = new Estudiante(datos.nombre, datos.apellido, datos.edad);
+        } 
+    if(estudiante){
+      estudiante=await this.estudianteRepository.save(estudiante);
+      return estudiante;
+    } else {
+      throw new NotFoundException("Estudiante no creado. Verifique los datos ingresados y vuelva a intentarlo");
+    }
   }
-}
-
-
-
-
-
-
-
-
- async create(createEstudianteDto: CreateEstudianteDto) {
-  const createEstudiantes = [];
-  
-    // Crea un nuevo objeto createEstudianteDto para cada estudiante
-    const newEstudianteDto = new CreateEstudianteDto();
-    newEstudianteDto.nombre = createEstudianteDto.nombre;
-    newEstudianteDto.apellido = createEstudianteDto.apellido;
-    newEstudianteDto.edad = createEstudianteDto.edad;
-
-    const newEstudiante = this.estudianteRepository.create(newEstudianteDto);
-    const savedEstudiante = await this.estudianteRepository.save(newEstudiante);
-    createEstudiantes.push(savedEstudiante);
-  
-  return createEstudiantes;
+    catch (error) {
+      throw new HttpException({status:HttpStatus.NOT_FOUND, 
+        error : 'Error en la creacion de estudiante '+error}, HttpStatus.NOT_FOUND);
+    }
 } 
- >>>>>>> master
 
+
+
+
+
+
+
+
+
+ 
   async getAll(): Promise<Estudiante[]> {
     return this.estudianteRepository.find();
   }

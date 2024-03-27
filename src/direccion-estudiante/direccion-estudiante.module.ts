@@ -3,10 +3,11 @@ import { DireccionEstudianteService } from './direccion-estudiante.service';
 import { DireccionEstudianteController } from './direccion-estudiante.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DireccionEstudiante } from './entities/direccion-estudiante.entity';
+import { Estudiante } from 'src/estudiantes/entities/estudiante.entity';
 
 
 @Module({
-  imports:[TypeOrmModule.forFeature([DireccionEstudiante])],
+  imports:[TypeOrmModule.forFeature([DireccionEstudiante,Estudiante])],
   controllers: [DireccionEstudianteController],
   providers: [DireccionEstudianteService],
 })

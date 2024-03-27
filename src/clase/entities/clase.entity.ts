@@ -15,15 +15,18 @@ nombre:string;
 aula: string
 
 @ManyToOne(()=>Escuela, escuela=>escuela.clases)   
+@JoinColumn({name:"idEscuela"})
 escuela:Escuela;
 
 @ManyToOne(()=>Profesor, profesor=>profesor.clase)
-@JoinColumn()
+@JoinColumn({name: "idProfesor"})
 profesor:Profesor;
 
-constructor (nombre:string, aula:string){
+constructor (nombre:string, aula:string, escuela:Escuela, profesor:Profesor){
     this.nombre=nombre;
-    this.aula=aula
+    this.aula=aula;
+    this.escuela=escuela;
+    this.profesor=profesor;
 }
 //PK ESCUELA
 //PK ESTUDIANTE

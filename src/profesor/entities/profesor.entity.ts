@@ -4,7 +4,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 @Entity('profesores')
 export class Profesor {
     @PrimaryGeneratedColumn()
-    private idProfesor: number;
+    public idProfesor: number;
 
     @Column({length:50})
     public nombre: string;

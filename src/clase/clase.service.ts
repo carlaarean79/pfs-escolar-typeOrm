@@ -6,17 +6,22 @@ import { Clase } from './entities/clase.entity';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
 import { Escuela } from 'src/escuela/entities/escuela.entity';
+import { EscuelaService } from 'src/escuela/escuela.service';
+import { ProfesorService } from 'src/profesor/profesor.service';
 
 @Injectable()
 export class ClaseService {
 constructor(@InjectRepository(Clase) private readonly claseRepository: Repository<Clase>){}
-
-  public async create(createClaseDto: CreateClaseDto):Promise<Clase> {
+  
+  public async create(datos: CreateClaseDto):Promise<Clase> {
     try {
-      let clase:Clase =await this.claseRepository.save(new Clase( 
-        createClaseDto.nombre, createClaseDto.aula
-      ))
+      let clase : Clase;
+      if (datos)
+          if (datos.nombre && datos.aula && datos.escuela && datos.profesor) {
+              clase = new Clase(datos.nombre, datos.aula, datos.escuela, datos.profesor);
+          } 
       if(clase){
+        clase=await this.claseRepository.save(clase);
         return clase;
       } else {
         throw new NotFoundException("No se pudo crear la clase");

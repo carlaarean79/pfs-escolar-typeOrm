@@ -33,7 +33,8 @@ public async createEstudiante(createEstudiante: CreateEstudianteDto): Promise<Es
 
 
 
-/*  async create(createEstudianteDto: CreateEstudianteDto) {
+
+ async create(createEstudianteDto: CreateEstudianteDto) {
   const createEstudiantes = [];
   
     // Crea un nuevo objeto createEstudianteDto para cada estudiante
@@ -48,7 +49,7 @@ public async createEstudiante(createEstudiante: CreateEstudianteDto): Promise<Es
   
   return createEstudiantes;
 } 
- */
+ >>>>>>> master
 
   async getAll(): Promise<Estudiante[]> {
     return this.estudianteRepository.find();

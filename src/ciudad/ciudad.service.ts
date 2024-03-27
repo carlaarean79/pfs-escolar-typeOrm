@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestj
 import { CreateCiudadDto } from './dto/create-ciudad.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Ciudad } from './entities/ciudad.entity';
-import { FindOneOptions, Repository } from 'typeorm';
+import {  Repository } from 'typeorm';
 
 
 @Injectable()
@@ -18,8 +18,8 @@ export class CiudadService {
 
   public async getCiudadById(Id:number):Promise<Ciudad>{
     try{
-      const criterio:FindOneOptions={where:{idCiudad:Id}}
-      let ciudad:Ciudad= await this.ciudadRepository.findOne(criterio);
+      //let criterio:FindOneOptions<Ciudad>={idCiudad: Id}
+      const ciudad:Ciudad= await this.ciudadRepository.findOneBy({ idCiudad: Id});
       if(ciudad) return ciudad;
       throw new NotFoundException("La ciudad no se encuentra");
     } catch (error){
@@ -46,12 +46,12 @@ export class CiudadService {
       }
   }
 
-  public async uodeateCiudad(id:number, ciudadDto:CreateCiudadDto):Promise<Ciudad>{
+  public async actualizarCiudad(id:number, ciudadDto:CreateCiudadDto):Promise<Ciudad>{
     try {
       let ciudad: Ciudad = await this.getCiudadById(id);
       if (ciudad){
-        ciudad.setNombre(ciudadDto.Nombre);
-        ciudad.setCodigoPostal(ciudadDto.CodigoPostal);
+        ciudad.Nombre=ciudadDto.Nombre;
+        ciudad.CodigoPostal=ciudadDto.CodigoPostal;
         ciudad= await this.ciudadRepository.save(ciudad);
         return ciudad;
       }
@@ -78,25 +78,3 @@ export class CiudadService {
 
  
 }
-
-/*
-create(createCiudadDto: CreateCiudadDto) {
-  return 'This action adds a new ciudad';
-}
-
-findAll() {
-  return `This action returns all ciudad`;
-}
-
-findOne(id: number) {
-  return `This action returns a #${id} ciudad`;
-}
-
-update(id: number, updateCiudadDto: UpdateCiudadDto) {
-  return `This action updates a #${id} ciudad`;
-}
-
-remove(id: number) {
-  return `This action removes a #${id} ciudad`;
-}
-*/

@@ -17,8 +17,8 @@ export class ProfesorService {
     return `This action returns all profesor`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} profesor`;
+  public async getProfesorById(id: number):Promise<Profesor> {
+    return await this.profesorRepository.findOneBy({idProfesor:id});
   }
 
   update(id: number, updateProfesorDto: UpdateProfesorDto) {

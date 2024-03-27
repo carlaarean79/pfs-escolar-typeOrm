@@ -12,6 +12,9 @@ import { ClaseModule } from './clase/clase.module';
 import { EscuelaModule } from './escuela/escuela.module';
 import { DireccionProfesorModule } from './direccion-profesor/direccion-profesor.module';
 import { DireccionEstudianteModule } from './direccion-estudiante/direccion-estudiante.module';
+import { Clase } from './clase/entities/clase.entity';
+import { Escuela } from './escuela/entities/escuela.entity';
+import { Profesor } from './profesor/entities/profesor.entity';
 
 @Module({       
   imports: [

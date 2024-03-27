@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Dir } from "fs";
+import { DireccionEstudiante } from "src/direccion-estudiante/entities/direccion-estudiante.entity";
+import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('estudiantes')
 export class Estudiante {
@@ -20,35 +22,5 @@ export class Estudiante {
         this.edad = edad
     }
 
-    public getIdEstudiante(): number {
-        return this.idEstudiante;
-    }
-
-    public getNombre(): string {
-        return this.nombre;
-    }
-
-    public getApellido(): string {
-        return this.apellido;
-    }
-
-    public getEdad(): number {
-        return this.edad;
-    }
-
-    public setNombre(nombre: string): void {
-        this.nombre = nombre;
-    }
-
-    public setApellido(apellido: string): void {
-        this.apellido = apellido;
-    }
-
-    public setEdad(edad: number): void {
-        this.edad = edad;
-    }
-    //fk ciudad
-    //fk direccion
-    //fk clase
-    //join
+    
 }

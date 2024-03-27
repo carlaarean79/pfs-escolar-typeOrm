@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Estudiante } from "src/estudiantes/entities/estudiante.entity";
+import { Column, Entity, JoinColumn, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('direccionEstudiantes')
 export class DireccionEstudiante {
@@ -8,7 +9,11 @@ export class DireccionEstudiante {
     @Column({length: 50})
     public direccion: string;
 
-    //FK IDESTUDIANTE
-    //FK IDCIUDAD
-    //JOIN
+ @ManyToMany(()=>Estudiante, estudiante => estudiante.idEstudiante)
+ @JoinColumn({name: "idEstudiante"})
+ estudiante:Estudiante;
+
+ constructor(direccion:string){
+    this.direccion=direccion;
+ }
 }

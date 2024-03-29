@@ -6,5 +6,5 @@ export class CreateEscuelaDto {
     nombre: string;
 
     @IsString()
-    direccion: string;
+    domicilio: string;
 }

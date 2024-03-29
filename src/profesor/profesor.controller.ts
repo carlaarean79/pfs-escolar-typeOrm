@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode } from '@nestjs/common';
 import { ProfesorService } from './profesor.service';
 import { CreateProfesorDto } from './dto/create-profesor.dto';
 import { UpdateProfesorDto } from './dto/update-profesor.dto';
+import { Profesor } from './entities/profesor.entity';
 
 @Controller('profesor')
 export class ProfesorController {
@@ -13,8 +14,8 @@ export class ProfesorController {
   }
 
   @Get()
-  findAll() {
-    return this.profesorService.findAll();
+  getProfesorAll() {
+    return this.profesorService.getProfesorAll();
   }
 
   @Get(':id')
@@ -22,9 +23,11 @@ export class ProfesorController {
     return this.profesorService.getProfesorById(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProfesorDto: UpdateProfesorDto) {
-    return this.profesorService.update(+id, updateProfesorDto);
+  
+  @Post()
+  @HttpCode(201)
+  createEstudiante(@Body() datos: CreateProfesorDto): Promise<Profesor> {
+    return this.profesorService.create(datos);
   }
 
   @Delete(':id')

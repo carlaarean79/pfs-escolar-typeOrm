@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEstudianteDto } from './dto/create-estudiante.dto';
 import { UpdateEstudianteDto } from './dto/update-estudiante.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,8 +9,22 @@ import { Repository } from 'typeorm';
 export class EstudiantesService {
 
  
-constructor(@InjectRepository(Estudiante) private readonly estudianteRepository: Repository<Estudiante>){}
+ constructor(@InjectRepository(Estudiante) private readonly estudianteRepository: Repository<Estudiante>){}
+ 
+public async createEstudiante(createEstudiante: CreateEstudianteDto): Promise<Estudiante>{
+  try{
+    let estudiante: Estudiante = await this.estudianteRepository.save(
+      new Estudiante(createEstudiante.nombre, createEstudiante.apellido,createEstudiante.edad)
+    )
+    if(estudiante)
+    return estudiante;
+  else 
+  throw new NotFoundException("No se pudo crear el nuevo estudiante. Verifique los datos ingresados e intente nuevamente")
+  } catch (error){
+    throw new HttpException({status:HttpStatus.NOT_FOUND,
+    error: `Error al implementar la acción para crear al nuevo estudiante`+error},-HttpStatus.NOT_FOUND)
 
+<<<<<<< HEAD
 private estudiantes: Estudiante[]=[]
 
   async create(createEstudianteDto: CreateEstudianteDto): Promise<Estudiante> {
@@ -26,6 +40,33 @@ private estudiantes: Estudiante[]=[]
 //"ciudad":"", si le agrego un atributo inexistente no lo crea, sí el resto  
 }
 
+=======
+  }
+}
+
+
+
+
+
+
+
+/*  async create(createEstudianteDto: CreateEstudianteDto) {
+  const createEstudiantes = [];
+  
+    // Crea un nuevo objeto createEstudianteDto para cada estudiante
+    const newEstudianteDto = new CreateEstudianteDto();
+    newEstudianteDto.nombre = createEstudianteDto.nombre;
+    newEstudianteDto.apellido = createEstudianteDto.apellido;
+    newEstudianteDto.edad = createEstudianteDto.edad;
+
+    const newEstudiante = this.estudianteRepository.create(newEstudianteDto);
+    const savedEstudiante = await this.estudianteRepository.save(newEstudiante);
+    createEstudiantes.push(savedEstudiante);
+  
+  return createEstudiantes;
+} 
+ */
+>>>>>>> 1588b1f33d387f7fc53f4167c7427236a6792899
 
   async getAll(): Promise<Estudiante[]> {
     return this.estudianteRepository.find();
@@ -50,7 +91,8 @@ private estudiantes: Estudiante[]=[]
 
       // Actualizar los atributos del estudiante según los datos proporcionados en el DTO
       estudiante.nombre = updateEstudianteDto.nombre !== undefined ? updateEstudianteDto.nombre : estudiante.nombre;
-      estudiante.apellido = updateEstudianteDto.apellido !== undefined ? updateEstudianteDto.apellido : estudiante.apellido;
+      estudiante.apellido 
+      = updateEstudianteDto.apellido !== undefined ? updateEstudianteDto.apellido : estudiante.apellido;
       estudiante.edad = updateEstudianteDto.edad !== undefined ? updateEstudianteDto.edad : estudiante.edad;
  
       // Guardar los cambios en la base de datos

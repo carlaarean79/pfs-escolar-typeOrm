@@ -1,10 +1,8 @@
-import { Catch, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEscuelaDto } from './dto/create-escuela.dto';
-import { UpdateEscuelaDto } from './dto/update-escuela.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Escuela } from './entities/escuela.entity';
 import { Repository } from 'typeorm';
-import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class EscuelaService {
@@ -73,32 +71,10 @@ public async eliminarEscuela(id:number):Promise<Boolean> {
       return true;
     } 
   } catch (error) { throw new HttpException({status:HttpStatus.NOT_FOUND, 
-    error : 'Error en la actualización de ciudad '+error}, HttpStatus.NOT_FOUND);
+    error : 'Error en la actualización de escuela '+error}, HttpStatus.NOT_FOUND);
   }
 }
 
 
   
 }
-/*
-
-create(createEscuelaDto: CreateEscuelaDto) {
-  return 'This action adds a new escuela';
-}
-
-findAll() {
-  return `This action returns all escuela`;
-}
-
-findOne(id: number) {
-  return `This action returns a #${id} escuela`;
-}
-
-update(id: number, updateEscuelaDto: UpdateEscuelaDto) {
-  return `This action updates a #${id} escuela`;
-}
-
-remove(id: number) {
-  return `This action removes a #${id} escuela`;
-}
-*/

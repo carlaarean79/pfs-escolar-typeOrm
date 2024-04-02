@@ -17,9 +17,12 @@ export class Estudiante {
     @Column('int')
     public edad: number;
 
+
+
     @ManyToMany(type => Clase, (clase) => clase.estudiante)
     @JoinTable({name:'clases_estudiantes_estudiantes'})
     public clases : Clase[];
+
 
     constructor(nombre: string, apellido: string, edad: number) {
         this.nombre = nombre;
@@ -27,5 +30,37 @@ export class Estudiante {
         this.edad = edad
     }
 
-    
+
+    public getIdEstudiante(): number {
+        return this.idEstudiante;
+    }
+
+    public getNombre(): string {
+        return this.nombre;
+    }
+
+    public getApellido(): string {
+        return this.apellido;
+    }
+
+    public getEdad(): number {
+        return this.edad;
+    }
+
+    public setNombre(nombre: string): void {
+        this.nombre = nombre;
+    }
+
+    public setApellido(apellido: string): void {
+        this.apellido = apellido;
+    }
+
+    public setEdad(edad: number): void {
+        this.edad = edad;
+    }
+    //fk ciudad
+    //fk direccion
+    //fk clase
+    //join
+
 }

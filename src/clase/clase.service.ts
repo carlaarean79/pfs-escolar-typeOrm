@@ -1,13 +1,9 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateClaseDto } from './dto/create-clase.dto';
-import { UpdateClaseDto } from './dto/update-clase.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Clase } from './entities/clase.entity';
-import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
-import { Profesor } from 'src/profesor/entities/profesor.entity';
-import { Escuela } from 'src/escuela/entities/escuela.entity';
-import { EscuelaService } from 'src/escuela/escuela.service';
-import { ProfesorService } from 'src/profesor/profesor.service';
+import { FindManyOptions, Repository } from 'typeorm';
+
 
 @Injectable()
 export class ClaseService {
@@ -33,7 +29,7 @@ constructor(@InjectRepository(Clase) private readonly claseRepository: Repositor
       }
   } 
 
-  public async getAll():Promise<Clase[]> {
+  public async getClase():Promise<Clase[]> {
     try {
       let criterio:FindManyOptions = {relations: ['profesor','escuela']}
       const clases = await this.claseRepository.find(criterio);
@@ -46,15 +42,45 @@ constructor(@InjectRepository(Clase) private readonly claseRepository: Repositor
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} clase`;
+  public async getClaseById(id: number):Promise<Clase> {
+    try{
+      const clase:Clase= await this.claseRepository.findOneBy({idClase: id});
+      if (clase) return clase;
+      throw new NotFoundException(`La clase con id ${id} no se encuentra`);
+    } catch (error) {
+      throw new HttpException( { status: HttpStatus.NOT_FOUND,
+      error: `Error por la busqueda de clase ${id} : ${error}`},
+      HttpStatus.NOT_FOUND);
+    }
+    
   }
 
-  update(id: number, updateClaseDto: UpdateClaseDto) {
-    return `This action updates a #${id} clase`;
+  public async actualizarClase(id: number, ClaseDto: CreateClaseDto):Promise<Clase> {
+    try{
+      let clase:Clase = await this.getClaseById(id);
+      if (ClaseDto.nombre && ClaseDto.aula && ClaseDto.escuela && ClaseDto.profesor) {
+        clase.nombre=ClaseDto.nombre;
+        clase.aula=ClaseDto.aula;
+        clase.escuela=ClaseDto.escuela;
+        clase.profesor=ClaseDto.profesor;
+        clase = await this.claseRepository.save(clase);
+        return clase;
+      }
+    } catch (error){
+      throw new HttpException({status:HttpStatus.NOT_FOUND, 
+      error : 'Error en la actualización de clase '+error}, HttpStatus.NOT_FOUND);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} clase`;
+  public async eliminarClase(id: number):Promise<Boolean> {
+    try{
+      let clase:Clase=await this.getClaseById(id);
+      if (clase){
+        this.claseRepository.remove(clase);
+        return true;
+      }
+    } catch (error) { throw new HttpException({status:HttpStatus.NOT_FOUND, 
+      error : 'Error en la actualización de clase '+error}, HttpStatus.NOT_FOUND);
+    }
   }
 }

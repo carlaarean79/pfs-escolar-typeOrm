@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
 import { ClaseService } from './clase.service';
 import { CreateClaseDto } from './dto/create-clase.dto';
-import { UpdateClaseDto } from './dto/update-clase.dto';
 import { Clase } from './entities/clase.entity';
 
 @Controller('clase')
@@ -14,35 +13,24 @@ export class ClaseController {
   }
 
   @Get()
-  getAll():Promise<Clase[]> {
-    return this.claseService.getAll();
+  getClase():Promise<Clase[]> {
+    return this.claseService.getClase();
+  }
+
+  @Get(':id')
+  getClaseById(@Param('id') id: number) {
+    return this.claseService.getClaseById(id);
+  }
+
+  @Put(':id')
+  actualizarClase(@Param('id') id: number, @Body() claseDto:CreateClaseDto){
+    return this.claseService.actualizarClase(+id, claseDto);
+  }
+
+  @Delete(':id')
+  eliminarClase(@Param('id') id: number) {
+    return this.claseService.eliminarClase(+id);
   }
   
 }
 
-
-/*
-@Post()
-  create(@Body() createClaseDto: CreateClaseDto) {
-    return this.claseService.create(createClaseDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.claseService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.claseService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateClaseDto: UpdateClaseDto) {
-    return this.claseService.update(+id, updateClaseDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.claseService.remove(+id);
-  }*/

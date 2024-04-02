@@ -1,4 +1,8 @@
+
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+
 import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+
 import { CreateEstudianteDto } from './dto/create-estudiante.dto';
 import { UpdateEstudianteDto } from './dto/update-estudiante.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,8 +14,29 @@ import { Clase } from 'src/clase/entities/clase.entity';
 export class EstudiantesService {
 
 
+ 
+ constructor(@InjectRepository(Estudiante) private readonly estudianteRepository: Repository<Estudiante>){}
+ 
+public async createEstudiante(createEstudiante: CreateEstudianteDto): Promise<Estudiante>{
+  try{
+    let estudiante: Estudiante = await this.estudianteRepository.save(
+      new Estudiante(createEstudiante.nombre, createEstudiante.apellido,createEstudiante.edad)
+    )
+    if(estudiante)
+    return estudiante;
+  else 
+  throw new NotFoundException("No se pudo crear el nuevo estudiante. Verifique los datos ingresados e intente nuevamente")
+  } catch (error){
+    throw new HttpException({status:HttpStatus.NOT_FOUND,
+    error: `Error al implementar la acción para crear al nuevo estudiante`+error},-HttpStatus.NOT_FOUND)
+
+
+private estudiantes: Estudiante[]=[]
+
+
   constructor(@InjectRepository(Estudiante) private readonly estudianteRepository: Repository<Estudiante>,
   @InjectRepository(Clase) private readonly claseRepository: Repository<Clase>) { }
+
 
   public async create(datos: CreateEstudianteDto): Promise<Estudiante> {
     try {
@@ -36,11 +61,17 @@ export class EstudiantesService {
     }
 }
 
+
+
+  }
+}
+
   private async estudianteExistente(id: number): Promise<boolean> {
     let criterio: FindOneOptions = { where: { idEstudiante: id } };
     let estudiante: Estudiante = await this.estudianteRepository.findOne(criterio);
     return (estudiante != null);
   }
+
 
 
 
@@ -67,10 +98,17 @@ export class EstudiantesService {
 
       // Actualizar los atributos del estudiante según los datos proporcionados en el DTO
       estudiante.nombre = updateEstudianteDto.nombre !== undefined ? updateEstudianteDto.nombre : estudiante.nombre;
+
+      estudiante.apellido 
+      = updateEstudianteDto.apellido !== undefined ? updateEstudianteDto.apellido : estudiante.apellido;
+      estudiante.edad = updateEstudianteDto.edad !== undefined ? updateEstudianteDto.edad : estudiante.edad;
+ 
+
       estudiante.apellido
         = updateEstudianteDto.apellido !== undefined ? updateEstudianteDto.apellido : estudiante.apellido;
 /*       estudiante.fechaNacimiento = updateEstudianteDto.edad !== undefined ? updateEstudianteDto.edad : estudiante.fechaNacimiento;
  */
+
       // Guardar los cambios en la base de datos
       return await this.estudianteRepository.save(estudiante);
     } catch (error) {

@@ -29,7 +29,7 @@ constructor(@InjectRepository(Clase) private readonly claseRepository: Repositor
     }
       catch (error) {
         throw new HttpException({status:HttpStatus.NOT_FOUND, 
-          error : 'Error en la creacion de ciudad '+error}, HttpStatus.NOT_FOUND);
+          error : 'Error en la creacion de la clase '+error}, HttpStatus.NOT_FOUND);
       }
   } 
 
@@ -42,7 +42,7 @@ constructor(@InjectRepository(Clase) private readonly claseRepository: Repositor
     }
     catch (error) {
       throw new HttpException({status:HttpStatus.NOT_FOUND, 
-        error : 'Error en la creacion de ciudad '+error}, HttpStatus.NOT_FOUND); 
+        error : 'Error en la creacion de  la clase '+error}, HttpStatus.NOT_FOUND); 
     }
   }
 

@@ -3,7 +3,7 @@ import { CreateEstudianteDto } from './dto/create-estudiante.dto';
 import { UpdateEstudianteDto } from './dto/update-estudiante.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Estudiante } from './entities/estudiante.entity';
-import { FindOneOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { Clase } from 'src/clase/entities/clase.entity';
 
 @Injectable()
@@ -36,24 +36,25 @@ export class EstudiantesService {
     }
 }
 
-  private async estudianteExistente(id: number): Promise<boolean> {
-    let criterio: FindOneOptions = { where: { idEstudiante: id } };
-    let estudiante: Estudiante = await this.estudianteRepository.findOne(criterio);
-    return (estudiante != null);
+
+
+public async getAll():Promise<Estudiante[]> {
+  try {
+    let criterio:FindManyOptions = {relations: ['clase']}
+    const estudiantes= await this.estudianteRepository.find(criterio);
+    if (estudiantes) return estudiantes;
+    throw new Error("No hay estudiantes cargados");
   }
-
-
-
-  async getAll(): Promise<Estudiante[]> {
-    return this.estudianteRepository.find();
+  catch (error) {
+    throw new HttpException({status:HttpStatus.NOT_FOUND, 
+      error : 'Error en la creacion del nuevo estudiante '+error}, HttpStatus.NOT_FOUND); 
   }
+}
 
   async getEstudianteById(id: number) {
-    return await this.estudianteRepository.findOne({
-      where: {
-        idEstudiante: id
-      }
-    });
+    let criterio: FindOneOptions = {relations:['clases'], where: {idEstudiante:id}}
+    let estudiante : Estudiante = await this.estudianteRepository.findOne(criterio);
+    return estudiante
   }
 
 

@@ -19,7 +19,7 @@ export class Estudiante {
 
     @ManyToMany(type => Clase, (clase) => clase.estudiante)
     @JoinTable({name:'clases_estudiantes_estudiantes'})
-    public clases : Clase[];
+    public clase : Clase[];
 
     constructor(nombre: string, apellido: string, edad: number) {
         this.nombre = nombre;

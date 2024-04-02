@@ -18,7 +18,11 @@ export class Profesor {
     @OneToMany(()=>Clase, clase=>clase.profesor)
     clase : Clase[];
 
-
+constructor(nombre:string,apellido:string,departamento:string){
+    this.nombre= nombre;
+    this.apellido = apellido;
+    this.departamento = departamento
+}
     //fk ciudad
     //fk direccion
     //clase

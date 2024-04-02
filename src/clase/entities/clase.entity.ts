@@ -1,5 +1,6 @@
 import { join } from "path";
 import { Escuela } from "src/escuela/entities/escuela.entity";
+import { Estudiante } from "src/estudiantes/entities/estudiante.entity";
 import { Profesor } from "src/profesor/entities/profesor.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
@@ -21,6 +22,12 @@ escuela:Escuela;
 @ManyToOne(()=>Profesor, profesor=>profesor.clase)
 @JoinColumn({name: "idProfesor"})
 profesor:Profesor;
+
+@ManyToMany(type => Estudiante)
+@JoinTable()
+estudiante : Estudiante[];
+
+
 
 constructor (nombre:string, aula:string, escuela:Escuela, profesor:Profesor){
     this.nombre=nombre;

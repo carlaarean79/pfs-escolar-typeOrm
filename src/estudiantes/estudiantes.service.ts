@@ -1,6 +1,4 @@
 
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-
 import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 
 import { CreateEstudianteDto } from './dto/create-estudiante.dto';
@@ -12,34 +10,6 @@ import { Clase } from 'src/clase/entities/clase.entity';
 
 @Injectable()
 export class EstudiantesService {
-
-
- 
- constructor(@InjectRepository(Estudiante) private readonly estudianteRepository: Repository<Estudiante>){}
- 
-public async createEstudiante(createEstudiante: CreateEstudianteDto): Promise<Estudiante>{
-  try{
-    let estudiante: Estudiante = await this.estudianteRepository.save(
-      new Estudiante(createEstudiante.nombre, createEstudiante.apellido,createEstudiante.edad)
-    )
-    if(estudiante)
-    return estudiante;
-  else 
-  throw new NotFoundException("No se pudo crear el nuevo estudiante. Verifique los datos ingresados e intente nuevamente")
-  } catch (error){
-    throw new HttpException({status:HttpStatus.NOT_FOUND,
-    error: `Error al implementar la acción para crear al nuevo estudiante`+error},-HttpStatus.NOT_FOUND)
-
-
-    }
-  }
-  
-  private estudiantes: Estudiante[]=[]
-
-
-private estudiantes: Estudiante[]=[]
-
-
 
   constructor(@InjectRepository(Estudiante) private readonly estudianteRepository: Repository<Estudiante>,
   @InjectRepository(Clase) private readonly claseRepository: Repository<Clase>) { }
@@ -69,21 +39,6 @@ private estudiantes: Estudiante[]=[]
         }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
-
-
-
-  }
-}
-
-  private async estudianteExistente(id: number): Promise<boolean> {
-    let criterio: FindOneOptions = { where: { idEstudiante: id } };
-    let estudiante: Estudiante = await this.estudianteRepository.findOne(criterio);
-    return (estudiante != null);
-  }
-
-
-
-
 
   async getAll(): Promise<Estudiante[]> {
     return this.estudianteRepository.find();

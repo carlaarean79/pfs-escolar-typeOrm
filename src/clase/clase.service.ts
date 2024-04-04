@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestj
 import { CreateClaseDto } from './dto/create-clase.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Clase } from './entities/clase.entity';
-import { FindManyOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 
 
 @Injectable()
@@ -25,7 +25,7 @@ constructor(@InjectRepository(Clase) private readonly claseRepository: Repositor
     }
       catch (error) {
         throw new HttpException({status:HttpStatus.NOT_FOUND, 
-          error : 'Error en la creacion de ciudad '+error}, HttpStatus.NOT_FOUND);
+          error : 'Error en la creacion de clase '+error}, HttpStatus.NOT_FOUND);
       }
   } 
 
@@ -38,13 +38,14 @@ constructor(@InjectRepository(Clase) private readonly claseRepository: Repositor
     }
     catch (error) {
       throw new HttpException({status:HttpStatus.NOT_FOUND, 
-        error : 'Error en la creacion de ciudad '+error}, HttpStatus.NOT_FOUND); 
+        error : 'Error en la creacion de clase '+error}, HttpStatus.NOT_FOUND); 
     }
   }
 
   public async getClaseById(id: number):Promise<Clase> {
     try{
-      const clase:Clase= await this.claseRepository.findOneBy({idClase: id});
+      let criterio: FindOneOptions = {relations: ['profesor', 'escuela'], where: {idClase:id}}
+      const clase = await this.claseRepository.findOne(criterio);      
       if (clase) return clase;
       throw new NotFoundException(`La clase con id ${id} no se encuentra`);
     } catch (error) {

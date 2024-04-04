@@ -31,7 +31,14 @@ public async createEstudiante(createEstudiante: CreateEstudianteDto): Promise<Es
     error: `Error al implementar la acción para crear al nuevo estudiante`+error},-HttpStatus.NOT_FOUND)
 
 
+    }
+  }
+  
+  private estudiantes: Estudiante[]=[]
+
+
 private estudiantes: Estudiante[]=[]
+
 
 
   constructor(@InjectRepository(Estudiante) private readonly estudianteRepository: Repository<Estudiante>,
@@ -45,6 +52,8 @@ private estudiantes: Estudiante[]=[]
         if (datos && datos.nombre && datos.apellido && datos.edad) {
             // Crear un nuevo estudiante con los datos del DTO
             estudiante = new Estudiante( datos.nombre, datos.apellido, datos.edad);
+
+
 
             // Guardar el estudiante en el repositorio de estudiantes
             estudiante = await this.estudianteRepository.save(estudiante);
@@ -71,6 +80,7 @@ private estudiantes: Estudiante[]=[]
     let estudiante: Estudiante = await this.estudianteRepository.findOne(criterio);
     return (estudiante != null);
   }
+
 
 
 

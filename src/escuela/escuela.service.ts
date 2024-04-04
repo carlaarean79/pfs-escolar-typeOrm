@@ -37,7 +37,7 @@ public async getEscuelaAll():Promise<Escuela[]>{
 public async crearEscuela(escuelaDto:CreateEscuelaDto):Promise<Escuela> {
   try{
     let escuela:Escuela = await this.escuelaRepository.save(new Escuela(
-      escuelaDto.nombre, escuelaDto.direccion
+      escuelaDto.nombre, escuelaDto.domicilio
     ));
     if (escuela) return escuela;
     throw new NotFoundException("No se pudo agregar escula a la base de datos");
@@ -53,7 +53,7 @@ public async actualizarEscuela(id:number, escuelaDto:CreateEscuelaDto):Promise<E
     let escuela:Escuela= await this.getEscuelaById(id);
     if(escuela){
       escuela.nombre=escuelaDto.nombre;
-      escuela.domicilio=escuelaDto.direccion;
+      escuela.domicilio=escuelaDto.domicilio;
       escuela = await this.escuelaRepository.save(escuela);
       return escuela;
     }

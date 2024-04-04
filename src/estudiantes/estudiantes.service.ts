@@ -1,12 +1,18 @@
+
 import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+
 import { CreateEstudianteDto } from './dto/create-estudiante.dto';
 import { UpdateEstudianteDto } from './dto/update-estudiante.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Estudiante } from './entities/estudiante.entity';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
+import { Clase } from 'src/clase/entities/clase.entity';
 
 @Injectable()
 export class EstudiantesService {
+
 
  
  constructor(@InjectRepository(Estudiante) private readonly estudianteRepository: Repository<Estudiante>){}
@@ -24,23 +30,59 @@ public async createEstudiante(createEstudiante: CreateEstudianteDto): Promise<Es
     throw new HttpException({status:HttpStatus.NOT_FOUND,
     error: `Error al implementar la acción para crear al nuevo estudiante`+error},-HttpStatus.NOT_FOUND)
 
+
     }
   }
   
   private estudiantes: Estudiante[]=[]
 
-  async create(createEstudianteDto: CreateEstudianteDto): Promise<Estudiante> {
+
+private estudiantes: Estudiante[]=[]
 
 
+
+  constructor(@InjectRepository(Estudiante) private readonly estudianteRepository: Repository<Estudiante>,
+  @InjectRepository(Clase) private readonly claseRepository: Repository<Clase>) { }
+
+
+  public async create(datos: CreateEstudianteDto): Promise<Estudiante> {
     try {
-      // Crea un nuevo objeto createEstudianteDto para cada estudiante
-      const newEstudiante = this.estudianteRepository.create(createEstudianteDto);// se le pasa el obj a través de la dto
-      return await this.estudianteRepository.save(newEstudiante); 
+        let estudiante: Estudiante;
 
-      } catch (error) { throw new HttpException('No se pudo crear el nuevo estudiante. Por favor verifique los datos',HttpStatus.BAD_REQUEST,{cause: error.message})}
-//"apellite": "juarez", lo toma como error me devuelve mensaje No se pudo crear el nuevo estudiante...
-//"ciudad":"", si le agrego un atributo inexistente no lo crea, sí el resto  
+        if (datos && datos.nombre && datos.apellido && datos.edad) {
+            // Crear un nuevo estudiante con los datos del DTO
+            estudiante = new Estudiante( datos.nombre, datos.apellido, datos.edad);
+
+
+
+            // Guardar el estudiante en el repositorio de estudiantes
+            estudiante = await this.estudianteRepository.save(estudiante);
+
+            return estudiante;
+        } else {
+            throw new BadRequestException("Los datos proporcionados no son válidos para crear el estudiante.");
+        }
+    } catch (error) {
+        throw new HttpException({
+            status: HttpStatus.INTERNAL_SERVER_ERROR,
+            error: 'Error en la creación del estudiante: ' + error.message
+        }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
+
+
+
+  }
+}
+
+  private async estudianteExistente(id: number): Promise<boolean> {
+    let criterio: FindOneOptions = { where: { idEstudiante: id } };
+    let estudiante: Estudiante = await this.estudianteRepository.findOne(criterio);
+    return (estudiante != null);
+  }
+
+
+
 
 
   async getAll(): Promise<Estudiante[]> {
@@ -56,9 +98,9 @@ public async createEstudiante(createEstudiante: CreateEstudianteDto): Promise<Es
   }
 
 
-  async  update(idEstudiante: number, updateEstudianteDto: UpdateEstudianteDto): Promise<Estudiante> {
+  async update(idEstudiante: number, updateEstudianteDto: UpdateEstudianteDto): Promise<Estudiante> {
     try {
-      const estudiante = await this.estudianteRepository.findOne({where:{idEstudiante}});
+      const estudiante = await this.estudianteRepository.findOne({ where: { idEstudiante } });
 
       if (!estudiante) {
         throw new Error('Estudiante no encontrado');
@@ -66,10 +108,17 @@ public async createEstudiante(createEstudiante: CreateEstudianteDto): Promise<Es
 
       // Actualizar los atributos del estudiante según los datos proporcionados en el DTO
       estudiante.nombre = updateEstudianteDto.nombre !== undefined ? updateEstudianteDto.nombre : estudiante.nombre;
+
       estudiante.apellido 
       = updateEstudianteDto.apellido !== undefined ? updateEstudianteDto.apellido : estudiante.apellido;
       estudiante.edad = updateEstudianteDto.edad !== undefined ? updateEstudianteDto.edad : estudiante.edad;
  
+
+      estudiante.apellido
+        = updateEstudianteDto.apellido !== undefined ? updateEstudianteDto.apellido : estudiante.apellido;
+/*       estudiante.fechaNacimiento = updateEstudianteDto.edad !== undefined ? updateEstudianteDto.edad : estudiante.fechaNacimiento;
+ */
+
       // Guardar los cambios en la base de datos
       return await this.estudianteRepository.save(estudiante);
     } catch (error) {

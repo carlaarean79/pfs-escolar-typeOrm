@@ -7,9 +7,10 @@ import { Escuela } from 'src/escuela/entities/escuela.entity';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
 import { EscuelaService } from 'src/escuela/escuela.service';
 import { ProfesorService } from 'src/profesor/profesor.service';
+import { Estudiante } from 'src/estudiantes/entities/estudiante.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Clase, Escuela, Profesor])],
+  imports:[TypeOrmModule.forFeature([Clase, Escuela, Profesor, Estudiante])],
   controllers: [ClaseController],
   providers: [ClaseService],
 })

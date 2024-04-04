@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProfesorDto } from './dto/create-profesor.dto';
 import { UpdateProfesorDto } from './dto/update-profesor.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,13 +9,40 @@ import { Repository } from 'typeorm';
 export class ProfesorService {
   constructor(@InjectRepository(Profesor) private readonly profesorRepository: Repository<Profesor>){}
 
-  create(createProfesorDto: CreateProfesorDto) {
-    return 'This action adds a new profesor';
-  }
+  public async create(datos: CreateProfesorDto): Promise<Profesor> {
+    try {
+        let profesor: Profesor;
 
-  findAll() {
-    return `This action returns all profesor`;
+        if (datos && datos.nombre && datos.apellido && datos.departamento) {
+            // Crear un nuevo profesor con los datos del DTO
+           profesor = new Profesor(datos.nombre, datos.apellido, datos.departamento );
+
+            // Guardar el profesor en el repositorio de estudiantes
+            profesor = await this.profesorRepository.save(profesor);
+
+            return profesor;
+        } else {
+            throw new BadRequestException("Los datos proporcionados no son válidos para crear el profesor.");
+        }
+    } catch (error) {
+        throw new HttpException({
+            status: HttpStatus.INTERNAL_SERVER_ERROR,
+            error: 'Error en la creación del estudiante: ' + error.message
+        }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+public async getProfesorAll():Promise<Profesor[]>{
+  try {
+    const profesor:Profesor[] = await this.profesorRepository.find();
+    if (profesor) return profesor;
+    throw new NotFoundException("No hay profesores cargados en la base de datos");
+  } catch (error){
+    throw new HttpException( { status : HttpStatus.NOT_FOUND, 
+      error : 'Error en la busqueda de profesores: '+error},
+      HttpStatus.NOT_FOUND);
+
   }
+}
 
   public async getProfesorById(id: number):Promise<Profesor> {
     return await this.profesorRepository.findOneBy({idProfesor:id});

@@ -24,8 +24,10 @@ public async createEstudiante(createEstudiante: CreateEstudianteDto): Promise<Es
     throw new HttpException({status:HttpStatus.NOT_FOUND,
     error: `Error al implementar la acción para crear al nuevo estudiante`+error},-HttpStatus.NOT_FOUND)
 
-<<<<<<< HEAD
-private estudiantes: Estudiante[]=[]
+    }
+  }
+  
+  private estudiantes: Estudiante[]=[]
 
   async create(createEstudianteDto: CreateEstudianteDto): Promise<Estudiante> {
 
@@ -40,33 +42,6 @@ private estudiantes: Estudiante[]=[]
 //"ciudad":"", si le agrego un atributo inexistente no lo crea, sí el resto  
 }
 
-=======
-  }
-}
-
-
-
-
-
-
-
-/*  async create(createEstudianteDto: CreateEstudianteDto) {
-  const createEstudiantes = [];
-  
-    // Crea un nuevo objeto createEstudianteDto para cada estudiante
-    const newEstudianteDto = new CreateEstudianteDto();
-    newEstudianteDto.nombre = createEstudianteDto.nombre;
-    newEstudianteDto.apellido = createEstudianteDto.apellido;
-    newEstudianteDto.edad = createEstudianteDto.edad;
-
-    const newEstudiante = this.estudianteRepository.create(newEstudianteDto);
-    const savedEstudiante = await this.estudianteRepository.save(newEstudiante);
-    createEstudiantes.push(savedEstudiante);
-  
-  return createEstudiantes;
-} 
- */
->>>>>>> 1588b1f33d387f7fc53f4167c7427236a6792899
 
   async getAll(): Promise<Estudiante[]> {
     return this.estudianteRepository.find();

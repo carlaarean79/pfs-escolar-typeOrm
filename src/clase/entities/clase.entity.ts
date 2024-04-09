@@ -1,4 +1,3 @@
-import { join } from "path";
 import { Escuela } from "src/escuela/entities/escuela.entity";
 import { Estudiante } from "src/estudiantes/entities/estudiante.entity";
 import { Profesor } from "src/profesor/entities/profesor.entity";
@@ -19,11 +18,16 @@ aula: string
 @JoinColumn({name:"idEscuela"})
 escuela:Escuela;
 
-@ManyToOne(()=>Profesor, profesor=>profesor.clase)
+@ManyToOne(()=>Profesor, profesor=>profesor.clases)
 @JoinColumn({name: "idProfesor"})
 profesor:Profesor;
 
+
+@ManyToMany(() => Estudiante)
+@JoinTable()
+
 @ManyToMany(() => Estudiante, (estudiante)=> estudiante.clases)
+
 estudiante : Estudiante[];
 
 

@@ -48,11 +48,38 @@ public async getProfesorAll():Promise<Profesor[]>{
     return await this.profesorRepository.findOneBy({idProfesor:id});
   }
 
-  update(id: number, updateProfesorDto: UpdateProfesorDto) {
-    return `This action updates a #${id} profesor`;
+  async update(id: number, updateProfesorDto: UpdateProfesorDto): Promise<Profesor> {
+    try {
+      const profesor = await this.profesorRepository.findOne({ where: { idProfesor: id } });
+      if (!profesor) {
+        throw new NotFoundException(`Profesor con ID ${id} no encontrado.`);
+      }
+      
+      // Actualizamos los campos del profesor utilizando la sintaxis de fusión de objetos
+      Object.assign(profesor, updateProfesorDto);
+  
+      // Guardamos los cambios en la base de datos
+      return await this.profesorRepository.save(profesor);
+    } catch (error) {
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error: 'Error al actualizar el profesor: ' + error.message
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} profesor`;
+ async remove(id: number): Promise<string> {
+  try {
+    const result = await this.profesorRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Profesor con ID ${id} no encontrado.`);
+    }
+    return `Profesor con ID ${id} eliminado exitosamente.`;
+  } catch (error) {
+    throw new HttpException({
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+      error: 'Error al eliminar el profesor: ' + error.message
+    }, HttpStatus.INTERNAL_SERVER_ERROR);
   }
+}
 }

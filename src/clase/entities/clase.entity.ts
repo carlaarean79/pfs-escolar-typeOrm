@@ -23,8 +23,7 @@ escuela:Escuela;
 @JoinColumn({name: "idProfesor"})
 profesor:Profesor;
 
-@ManyToMany(type => Estudiante)
-@JoinTable()
+@ManyToMany(() => Estudiante, (estudiante)=> estudiante.clases)
 estudiante : Estudiante[];
 
 

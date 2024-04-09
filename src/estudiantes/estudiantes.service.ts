@@ -1,92 +1,96 @@
 
 import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 
-import { CreateEstudianteDto } from './dto/create-estudiante.dto';
-import { UpdateEstudianteDto } from './dto/update-estudiante.dto';
+import { EstudianteDto } from './dto/create-estudiante.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Estudiante } from './entities/estudiante.entity';
-import { FindOneOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { Clase } from 'src/clase/entities/clase.entity';
 
 @Injectable()
 export class EstudiantesService {
 
   constructor(@InjectRepository(Estudiante) private readonly estudianteRepository: Repository<Estudiante>,
-  @InjectRepository(Clase) private readonly claseRepository: Repository<Clase>) { }
+    @InjectRepository(Clase) private readonly claseRepository: Repository<Clase>) { }
 
 
-  public async create(datos: CreateEstudianteDto): Promise<Estudiante> {
+  public async create(datos: EstudianteDto): Promise<Estudiante> {
     try {
-        let estudiante: Estudiante;
-
-        if (datos && datos.nombre && datos.apellido && datos.edad) {
-            // Crear un nuevo estudiante con los datos del DTO
-            estudiante = new Estudiante( datos.nombre, datos.apellido, datos.edad);
-
-
-
-            // Guardar el estudiante en el repositorio de estudiantes
-            estudiante = await this.estudianteRepository.save(estudiante);
-
-            return estudiante;
-        } else {
-            throw new BadRequestException("Los datos proporcionados no son válidos para crear el estudiante.");
-        }
-    } catch (error) {
-        throw new HttpException({
-            status: HttpStatus.INTERNAL_SERVER_ERROR,
-            error: 'Error en la creación del estudiante: ' + error.message
-        }, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-}
-
-  async getAll(): Promise<Estudiante[]> {
-    return this.estudianteRepository.find();
-  }
-
-  async getEstudianteById(id: number) {
-    return await this.estudianteRepository.findOne({
-      where: {
-        idEstudiante: id
+      let estudiante: Estudiante;
+      if (datos && datos.nombre && datos.apellido && datos.edad) {
+        // Crear un nuevo estudiante con los datos del DTO
+        estudiante = new Estudiante(datos.nombre, datos.apellido, datos.edad);
+        // Guardar el estudiante en el repositorio de estudiantes
+        estudiante = await this.estudianteRepository.save(estudiante);
+        return estudiante;
+      } else {
+        throw new BadRequestException("Los datos proporcionados no son válidos para crear el estudiante.");
       }
-    });
+    } catch (error) {
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error: 'Error en la creación del estudiante: ' + error.message
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
-
-  async update(idEstudiante: number, updateEstudianteDto: UpdateEstudianteDto): Promise<Estudiante> {
+  async getEstudianteAll(): Promise<Estudiante[]> {
     try {
-      const estudiante = await this.estudianteRepository.findOne({ where: { idEstudiante } });
-
-      if (!estudiante) {
-        throw new Error('Estudiante no encontrado');
-      }
-
-      // Actualizar los atributos del estudiante según los datos proporcionados en el DTO
-      estudiante.nombre = updateEstudianteDto.nombre !== undefined ? updateEstudianteDto.nombre : estudiante.nombre;
-
-      estudiante.apellido 
-      = updateEstudianteDto.apellido !== undefined ? updateEstudianteDto.apellido : estudiante.apellido;
-      estudiante.edad = updateEstudianteDto.edad !== undefined ? updateEstudianteDto.edad : estudiante.edad;
- 
-
-      estudiante.apellido
-        = updateEstudianteDto.apellido !== undefined ? updateEstudianteDto.apellido : estudiante.apellido;
-/*       estudiante.fechaNacimiento = updateEstudianteDto.edad !== undefined ? updateEstudianteDto.edad : estudiante.fechaNacimiento;
- */
-
-      // Guardar los cambios en la base de datos
-      return await this.estudianteRepository.save(estudiante);
+      let criterio: FindManyOptions = { relations: [] }
+      const estudiante = await this.estudianteRepository.find(criterio);
+      if (estudiante) return estudiante;
+      throw new Error('El fichero estudiantes está vacio. Debe realizar primero una carga de datos')
     } catch (error) {
-      // Manejo de errores
-      throw new Error('No se pudo actualizar el estudiante');
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        error: 'Se produjo un error al intentar obtener los datos. Comprueba la ruta de busqueda e intente nuevamente' + error
+      }, HttpStatus.NOT_FOUND);
     }
-    //nota: si agrego un id no existente da error 500. deberia decir estudiante no encontrado
-    //"apellite": "juarez", no toma la modificación del apellido por estar mas escrito. sin enbargo no tira error
+  }
+
+  public async getEstudianteById(id: number): Promise <Estudiante>  {
+   try{
+    let criterio: FindOneOptions= {relations: [], where: {idEstudiante:id}}
+    const estudiante= await this.estudianteRepository.findOne(criterio);
+    if (estudiante) return estudiante;
+    throw new NotFoundException(`Es estudiante al cual hace referencia el el id ${id} no se encuentra en la base de datos. Verifique los campos ingresados e intente nuevamente`);
+   } catch (error){
+    throw new HttpException({status: HttpStatus.NOT_FOUND, error: `Se produjo un error al intentar obtener el estudiante con id ${id}. Compruebe los datos ingresados e intente nuevamente`}, 
+    HttpStatus.NOT_FOUND);
+   }
+  }
+
+
+  public async updateEstudiante(id: number, datos: EstudianteDto): Promise<Estudiante> {
+    try {
+      let estudiante: Estudiante = await this.getEstudianteById(id);
+      if(datos.nombre && datos.apellido && datos.edad){
+        estudiante.nombre = datos.nombre;
+        estudiante.apellido = datos.apellido;
+        estudiante.edad = datos.edad;
+        estudiante = await this.estudianteRepository.save(estudiante);
+        return estudiante;
+      }
+       } catch (error) {
+        throw new HttpException({status: HttpStatus.NOT_FOUND,
+          error: `Se produjo un error inesperado al intentar cargar el nuevo estudiante. error: ${error}`}, HttpStatus.NOT_FOUND
+        )
+    }
   }
 
 
 
-  deleteEstudiante(id: number) {
-    return this.estudianteRepository.delete(id)
+  public async deleteEstudiante(id: number) {
+   try{
+    let estudiante: Estudiante = await this.getEstudianteById(id);
+    if (estudiante){
+      this.estudianteRepository.remove(estudiante);
+      return `Estudiante ${estudiante.nombre},${estudiante.apellido} ha sido eliminado con éxito de la base de datos`
+    }
+   } catch (error){
+    throw new HttpException({status:HttpStatus.NOT_FOUND,
+      error: `Se produjo un error al intentar eliminar al estudiante con id ${id}`},HttpStatus.NO_CONTENT
+    )
+   }
   }
 }

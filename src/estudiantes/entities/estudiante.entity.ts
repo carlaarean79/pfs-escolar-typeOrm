@@ -15,8 +15,8 @@ export class Estudiante {
     @Column('int')
     public edad: number;
 
-    @ManyToMany(() => Clase, (clase) => clase.estudiante)
-    @JoinTable({name:'clases_estudiantes_estudiantes'})
+    @ManyToMany(() => Clase, (clase) => clase.estudiante, {cascade: true})//faltaria cascade en clase
+    @JoinTable({name:'clases_estudiantes'})                                 //y join table()
     public clases : Clase[];
 
 

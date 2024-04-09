@@ -1,12 +1,11 @@
 
 
-import { BadRequestException, HttpException, HttpStatus, Injectable, } from '@nestjs/common';
-import { CreateEstudianteDto } from './dto/create-estudiante.dto';
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException, } from '@nestjs/common';
+import { EstudianteDto } from './dto/create-estudiante.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Estudiante } from './entities/estudiante.entity';
 import { Repository } from 'typeorm';
-import { EstudianteDto } from './dto/create-estudiante.dto';
-import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions} from 'typeorm';
 import { Clase } from 'src/clase/entities/clase.entity';
 
 @Injectable()

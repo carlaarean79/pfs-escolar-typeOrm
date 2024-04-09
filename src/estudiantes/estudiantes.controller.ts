@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, HttpCode, ParseIntPipe, HttpStatus} from '@nestjs/common';
 import { EstudiantesService } from './estudiantes.service';
 import {EstudianteDto } from './dto/create-estudiante.dto';
-import { UpdateEstudianteDto } from './dto/update-estudiante.dto';
 import { Estudiante } from './entities/estudiante.entity';
 
 @Controller('estudiantes/')

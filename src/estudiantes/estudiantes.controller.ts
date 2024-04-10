@@ -29,11 +29,7 @@ export class EstudiantesController {
 
   @Put(':id')
   update(@Param('id',new ParseIntPipe({errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE})) id: number, @Body() updateEstudianteDto: UpdateEstudianteDto) {
-    if (updateEstudianteDto.clases){
-      return this.estudiantesService.agregarEstudianteClase(id, updateEstudianteDto.clases);
-    } else {
       return this.estudiantesService.update(id, updateEstudianteDto);
-    }
   }
 
   @Delete(':id')

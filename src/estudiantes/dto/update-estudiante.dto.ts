@@ -14,4 +14,5 @@ export class UpdateEstudianteDto extends PartialType(EstudianteDto) {
 
     @IsNumber()
     edad?: number;
+
 }

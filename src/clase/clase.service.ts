@@ -31,7 +31,7 @@ constructor(@InjectRepository(Clase) private readonly claseRepository: Repositor
 
   public async getClase():Promise<Clase[]> {
     try {
-      let criterio:FindManyOptions = {relations: ['profesor','escuela']}
+      let criterio:FindManyOptions = {relations: ['profesor','escuela','estudiante']}
       const clases = await this.claseRepository.find(criterio);
       if (clases) return clases;
       throw new Error("No hay clases cargadas");
@@ -44,7 +44,7 @@ constructor(@InjectRepository(Clase) private readonly claseRepository: Repositor
 
   public async getClaseById(id: number):Promise<Clase> {
     try{
-      let criterio: FindOneOptions = {relations: ['profesor', 'escuela'], where: {idClase:id}}
+      let criterio: FindOneOptions = {relations: ['profesor', 'escuela', 'estudiante'], where: {idClase:id}}
       const clase = await this.claseRepository.findOne(criterio);      
       if (clase) return clase;
       throw new NotFoundException(`La clase con id ${id} no se encuentra`);

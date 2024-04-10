@@ -16,6 +16,7 @@ import { Clase } from './clase/entities/clase.entity';
 import { Escuela } from './escuela/entities/escuela.entity';
 import { Profesor } from './profesor/entities/profesor.entity';
 import { Estudiante } from './estudiantes/entities/estudiante.entity';
+import { EstudiantesClasesModule } from './estudiantes-clases/estudiantes-clases.module';
 
 @Module({       
   imports: [
@@ -29,7 +30,7 @@ import { Estudiante } from './estudiantes/entities/estudiante.entity';
     database: 'escolar',
     entities: [Escuela,Clase,Estudiante,Profesor],
     synchronize: true
-  }), CiudadModule, EstudiantesModule, ProfesorModule, AsistenciaModule, ClaseModule, EscuelaModule, DireccionProfesorModule, DireccionEstudianteModule],
+  }), CiudadModule, EstudiantesModule, ProfesorModule, AsistenciaModule, ClaseModule, EscuelaModule, DireccionProfesorModule, DireccionEstudianteModule, EstudiantesClasesModule],
   controllers: [AppController],
   providers: [AppService],
 })

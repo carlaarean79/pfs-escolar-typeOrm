@@ -1,18 +1,20 @@
 
 
-import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException, } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { EstudianteDto } from './dto/create-estudiante.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Estudiante } from './entities/estudiante.entity';
-import { Repository } from 'typeorm';
-import { FindManyOptions, FindOneOptions} from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { Clase } from 'src/clase/entities/clase.entity';
+
 
 @Injectable()
 export class EstudiantesService {
 
-  constructor(@InjectRepository(Estudiante) private readonly estudianteRepository: Repository<Estudiante>,
-    @InjectRepository(Clase) private readonly claseRepository: Repository<Clase>) { }
+
+  constructor(@InjectRepository(Estudiante) private readonly estudianteRepository: Repository<Estudiante>) { }
+  @InjectRepository(Clase) private readonly claseRepository: Repository<Clase>) { }
+
 
 
   public async create(datos: EstudianteDto): Promise<Estudiante> {
@@ -34,6 +36,16 @@ export class EstudiantesService {
       }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+
+  async getAll(): Promise<Estudiante[]> {
+    let criterio:FindManyOptions = {relations: ['clases']}
+    return this.estudianteRepository.find(criterio);
+  }
+
+  async getEstudianteById(id: number) {
+    let criterio: FindOneOptions = {relations: ['clases'], where: {idEstudiante:id}}
+    return await this.estudianteRepository.findOne(criterio);
 
   async getEstudianteAll(): Promise<Estudiante[]> {
     try {
@@ -59,6 +71,7 @@ export class EstudiantesService {
     throw new HttpException({status: HttpStatus.NOT_FOUND, error: `Se produjo un error al intentar obtener el estudiante con id ${id}. Compruebe los datos ingresados e intente nuevamente`}, 
     HttpStatus.NOT_FOUND);
    }
+
   }
 
 

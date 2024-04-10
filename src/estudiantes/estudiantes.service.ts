@@ -1,19 +1,43 @@
 
-import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 import { CreateEstudianteDto } from './dto/create-estudiante.dto';
 import { UpdateEstudianteDto } from './dto/update-estudiante.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Estudiante } from './entities/estudiante.entity';
-import { FindOneOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { Clase } from 'src/clase/entities/clase.entity';
+import { ClaseService } from 'src/clase/clase.service';
 
 @Injectable()
 export class EstudiantesService {
 
   constructor(@InjectRepository(Estudiante) private readonly estudianteRepository: Repository<Estudiante>,
-  @InjectRepository(Clase) private readonly claseRepository: Repository<Clase>) { }
+  @Inject(ClaseService) private readonly claseService: ClaseService) { }
 
+  public async agregarEstudianteClase(idEstudiante:number, id:number[]): Promise<Estudiante> {
+    try{
+      let estudiante = await this.getEstudianteById(idEstudiante);
+      if ( estudiante) {
+        if (!estudiante.clases) estudiante.clases=[];
+       
+       for (const claseId of id) {
+        let clase: Clase = await this.claseService.getClaseById(claseId);
+        if (clase) {
+            estudiante.clases.push(clase);
+          }
+        }
+        estudiante = await this.estudianteRepository.save(estudiante);
+        return estudiante;
+      } 
+      } catch (error) {
+      throw new HttpException({
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Error en el intento de agregar clase al estudiante: ' + error.message
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  }
 
   public async create(datos: CreateEstudianteDto): Promise<Estudiante> {
     try {
@@ -41,15 +65,13 @@ export class EstudiantesService {
 }
 
   async getAll(): Promise<Estudiante[]> {
-    return this.estudianteRepository.find();
+    let criterio:FindManyOptions = {relations: ['clases']}
+    return this.estudianteRepository.find(criterio);
   }
 
   async getEstudianteById(id: number) {
-    return await this.estudianteRepository.findOne({
-      where: {
-        idEstudiante: id
-      }
-    });
+    let criterio: FindOneOptions = {relations: ['clases'], where: {idEstudiante:id}}
+    return await this.estudianteRepository.findOne(criterio);
   }
 
 

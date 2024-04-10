@@ -18,6 +18,9 @@ import { Profesor } from './profesor/entities/profesor.entity';
 import { Estudiante } from './estudiantes/entities/estudiante.entity';
 import { EstudiantesClasesModule } from './estudiantes-clases/estudiantes-clases.module';
 import { DireccionEstudiante } from './direccion-estudiante/entities/direccion-estudiante.entity';
+import { AuthModule } from './auth/auth.module';
+import { UserService } from './user/user.service';
+import { UserModule } from './user/user.module';
 
 @Module({       
   imports: [
@@ -31,8 +34,8 @@ import { DireccionEstudiante } from './direccion-estudiante/entities/direccion-e
     database: 'escolar',
     entities: [__dirname + "/entity/*{.js,.ts}"],
     synchronize: true
-  }), CiudadModule, EstudiantesModule, ProfesorModule, AsistenciaModule, ClaseModule, EscuelaModule, DireccionProfesorModule, DireccionEstudianteModule, EstudiantesClasesModule],
+  }), CiudadModule, EstudiantesModule, ProfesorModule, AsistenciaModule, ClaseModule, EscuelaModule, DireccionProfesorModule, DireccionEstudianteModule, EstudiantesClasesModule, AuthModule, UserModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, UserService],
 })
 export class AppModule {}

@@ -35,20 +35,21 @@ public async createDireccion(datos: DireccionEstudianteDto): Promise<DireccionEs
 
   public async findDireccionAll() : Promise<DireccionEstudiante[]>{
     try{
-      let criterio: FindManyOptions = {relations:[]};
+      let criterio: FindManyOptions = {relations:['estudiantes']};
       const direccion = await this.direccionRepository.find(criterio);
       if(direccion) return direccion;
       throw new Error('El fichero dirección está vacio. Debe realizar primero una carga de datos');
     } catch (error){
       throw new HttpException({status: HttpStatus.NOT_FOUND, error: `Se produjo un error al intentar obtener los datos. Compruebe la ruta de búsqueda e intente nuevamente`},
         HttpStatus.NOT_FOUND
+        
       );
     }
   }
 
   public async findOneDireccion(id: number) : Promise<DireccionEstudiante>{
    try{
-    let criterio: FindOneOptions = {relations:[],where:{idDireccion:id}}
+    let criterio: FindOneOptions = {relations:['estudiantes'],where:{idDireccion:id}}
     const direccion = await this.direccionRepository.findOne(criterio);
     if(direccion) return direccion;
     throw new NotFoundException(`La dirección con id ${id} a la cual hace referemncia, no se encuentra en la base de datos`)

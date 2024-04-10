@@ -45,17 +45,26 @@ export class EstudiantesClasesService {
     
       }
 
-      public async eliminarClaseEstudiante(idEstudiante:number, idClase:number): Promise<Boolean> {
+      public async eliminarClaseEstudiante(idEstudiante:number, idClase:DtoEstudiantesClases): Promise<Boolean> {
         try {
             let estudiante = await this.estudianteService.getEstudianteById(idEstudiante);
             if (estudiante) {
-                let clase = await this.claseService.getClaseById(idClase);
-                if (clase) {
-                    estudiante.clases= estudiante.clases.filter(c=> c.idClase !== idClase);
+                const clasesABorrar:Clase[] = []
+                for (const claseId of idClase.clases) {
+                    let clase = await this.claseService.getClaseById(claseId);
+                    if (clase) {
+                        clasesABorrar.push(clase);
+                    }
+                }
+                if (clasesABorrar) {                        
+                    estudiante.clases = estudiante.clases.filter(c => !clasesABorrar.some(claseABorrar => claseABorrar.idClase === c.idClase));
+
+                    console.log(`${estudiante.clases[0].idClase}; ${clasesABorrar[0].idClase}`);
+                    
                     await this.estudianteRepository.save(estudiante);
                     return true;
                 } else {
-                    throw new NotFoundException(`Clase con id ${idClase} no encontrada`);
+                    throw new NotFoundException(`Clases con ids ${idClase} no encontradas`);
                 }
             } else {
                 throw new NotFoundException(`Estudiante con id ${idEstudiante} no encontrado`);

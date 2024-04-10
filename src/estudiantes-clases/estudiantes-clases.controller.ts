@@ -21,7 +21,7 @@ export class EstudiantesClasesController {
 
     @Delete(':id')
     eliminarClaseEstudiante(@Param('id') id:number, @Body() datos: DtoEstudiantesClases): Promise<Boolean> {
-        return this.estudianteClaseService.eliminarClaseEstudiante(id,datos.clase);
+        return this.estudianteClaseService.eliminarClaseEstudiante(id,datos);
     }
 
 }

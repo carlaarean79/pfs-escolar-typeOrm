@@ -17,6 +17,7 @@ import { Escuela } from './escuela/entities/escuela.entity';
 import { Profesor } from './profesor/entities/profesor.entity';
 import { Estudiante } from './estudiantes/entities/estudiante.entity';
 import { EstudiantesClasesModule } from './estudiantes-clases/estudiantes-clases.module';
+import { DireccionEstudiante } from './direccion-estudiante/entities/direccion-estudiante.entity';
 
 @Module({       
   imports: [
@@ -28,7 +29,7 @@ import { EstudiantesClasesModule } from './estudiantes-clases/estudiantes-clases
     username: 'root',
     password: 'root',
     database: 'escolar',
-    entities: [Escuela,Clase,Estudiante,Profesor],
+    entities: [__dirname + "/entity/*{.js,.ts}"],
     synchronize: true
   }), CiudadModule, EstudiantesModule, ProfesorModule, AsistenciaModule, ClaseModule, EscuelaModule, DireccionProfesorModule, DireccionEstudianteModule, EstudiantesClasesModule],
   controllers: [AppController],

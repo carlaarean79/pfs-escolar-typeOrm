@@ -31,8 +31,8 @@ export class EstudiantesController {
 
   @Put(':id')
 
-  update(@Param('id',new ParseIntPipe({errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE})) id: number, @Body() updateEstudianteDto: UpdateEstudianteDto) {
-      return this.estudiantesService.update(id, updateEstudianteDto);
+  updateEstudiante(@Param('id',new ParseIntPipe({errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE})) id: number, @Body() updateEstudianteDto: EstudianteDto) {
+      return this.estudiantesService.updateEstudiante(id, updateEstudianteDto);
 
 
   }

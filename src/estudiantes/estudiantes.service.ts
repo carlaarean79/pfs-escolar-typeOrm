@@ -1,10 +1,10 @@
 
 
-import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { EstudianteDto } from './dto/create-estudiante.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Estudiante } from './entities/estudiante.entity';
-import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
+import {  FindOneOptions, Repository, FindManyOptions } from 'typeorm';
 import { Clase } from 'src/clase/entities/clase.entity';
 
 
@@ -12,7 +12,7 @@ import { Clase } from 'src/clase/entities/clase.entity';
 export class EstudiantesService {
 
 
-  constructor(@InjectRepository(Estudiante) private readonly estudianteRepository: Repository<Estudiante>) { }
+  constructor(@InjectRepository(Estudiante) private readonly estudianteRepository: Repository<Estudiante>,
   @InjectRepository(Clase) private readonly claseRepository: Repository<Clase>) { }
 
 
@@ -39,17 +39,18 @@ export class EstudiantesService {
 
 
   async getAll(): Promise<Estudiante[]> {
-    let criterio:FindManyOptions = {relations: ['clases']}
+    let criterio:FindManyOptions = {relations: ['clases', 'direccion']}
     return this.estudianteRepository.find(criterio);
   }
 
-  async getEstudianteById(id: number) {
+ /*  async getEstudianteById(id: number) {
     let criterio: FindOneOptions = {relations: ['clases'], where: {idEstudiante:id}}
     return await this.estudianteRepository.findOne(criterio);
-
+  } */
+  
   async getEstudianteAll(): Promise<Estudiante[]> {
     try {
-      let criterio: FindManyOptions = { relations: [] }
+      let criterio: FindManyOptions = { relations: ['direccion'] }
       const estudiante = await this.estudianteRepository.find(criterio);
       if (estudiante) return estudiante;
       throw new Error('El fichero estudiantes está vacio. Debe realizar primero una carga de datos')
@@ -63,7 +64,7 @@ export class EstudiantesService {
 
   public async getEstudianteById(id: number): Promise <Estudiante>  {
    try{
-    let criterio: FindOneOptions= {relations: [], where: {idEstudiante:id}}
+    let criterio: FindOneOptions= {relations: ['direccion'], where: {idEstudiante:id}}
     const estudiante= await this.estudianteRepository.findOne(criterio);
     if (estudiante) return estudiante;
     throw new NotFoundException(`Es estudiante al cual hace referencia el el id ${id} no se encuentra en la base de datos. Verifique los campos ingresados e intente nuevamente`);

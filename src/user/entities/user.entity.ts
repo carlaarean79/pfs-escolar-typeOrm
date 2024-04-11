@@ -1,31 +1,18 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity('user')
-export class User{
+@Entity('users') // nombre de la tabla
+export class User {
+    @PrimaryGeneratedColumn() // columna de clave primaria autoincremental
+    userId: number    //---------> atributo asociado a typeScript
+    @Column()
+    username: string
 
-    @PrimaryGeneratedColumn()
-     idUser: number;
-    
-    @Column({ length: 50})
-    name: string;
-    
-    @Column({ length: 50})
-    lastname: string;
-    
-    @Column({ length: 50 })
-     email: string;
-    
-    @Column( { length: 200 })
-    password: string;
-    
-    @Column({ length: 50 })
-     username: string;
+    @Column()
+    password: string
 
-    constructor(name: string, lastname:string, email: string, password: string,username:string){
-        this.name = name;
-        this.lastname = lastname;
-        this.email = email;
-        this.password;
-        this.username = username
+    constructor(
+    username: string,password:string){
+        this.username = username;
+        this.password = password;
     }
 }

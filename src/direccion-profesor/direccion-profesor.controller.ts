@@ -1,34 +1,36 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { DireccionProfesorService } from './direccion-profesor.service';
-import { CreateDireccionProfesorDto } from './dto/create-direccion-profesor.dto';
-import { UpdateDireccionProfesorDto } from './dto/update-direccion-profesor.dto';
+import { DireccionProfesor } from './entities/direccion-profesor.entity';
+import { DireccionProfesorDto } from './dto/update-direccion-profesor.dto';
+import { Controller } from '@nestjs/common';
+import { Post, Get, Patch, Delete } from '@nestjs/common/decorators/http/request-mapping.decorator';
+import { Body, Param } from '@nestjs/common/decorators/http/route-params.decorator';
 
 @Controller('direccion-profesor')
 export class DireccionProfesorController {
   constructor(private readonly direccionProfesorService: DireccionProfesorService) {}
 
   @Post()
-  create(@Body() createDireccionProfesorDto: CreateDireccionProfesorDto) {
-    return this.direccionProfesorService.create(createDireccionProfesorDto);
+  create(@Body() datos: DireccionProfesorDto): Promise<DireccionProfesor> {
+    return this.direccionProfesorService.createDireccion(datos);
   }
 
   @Get()
-  findAll() {
-    return this.direccionProfesorService.findAll();
+  async findAll() {
+    return this.direccionProfesorService.findDireccionAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.direccionProfesorService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return this.direccionProfesorService.findOneDireccion(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDireccionProfesorDto: UpdateDireccionProfesorDto) {
-    return this.direccionProfesorService.update(+id, updateDireccionProfesorDto);
+  async update(@Param('id') id: string, @Body() datos: DireccionProfesorDto) {
+    return this.direccionProfesorService.updateDireccion(+id, datos);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.direccionProfesorService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return this.direccionProfesorService.removeDireccion(+id);
   }
 }

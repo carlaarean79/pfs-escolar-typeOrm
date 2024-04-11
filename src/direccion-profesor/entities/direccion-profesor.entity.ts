@@ -6,7 +6,11 @@ export class DireccionProfesor {
 private idDireccionProfesor: number;
 
 @Column()
-public direccion: string;
+    public direccion: string;
+
+    constructor(direccion:string){
+        this.direccion=direccion;
+    }
 
 //FK PROFESOR
 //FK CIUDAD

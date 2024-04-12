@@ -48,7 +48,8 @@ export class EstudiantesClasesService {
       public async eliminarClaseEstudiante(idEstudiante:number, idClase:DtoEstudiantesClases): Promise<Boolean> {
         try {
             let estudiante = await this.estudianteService.getEstudianteById(idEstudiante);
-            if (estudiante) {
+            if (estudiante) {                
+                console.log(`estoy aqui ${estudiante.clases}`);
                 const clasesABorrar:Clase[] = []
                 for (const claseId of idClase.clases) {
                     let clase = await this.claseService.getClaseById(claseId);
@@ -57,10 +58,7 @@ export class EstudiantesClasesService {
                     }
                 }
                 if (clasesABorrar) {                        
-                    estudiante.clases = estudiante.clases.filter(c => !clasesABorrar.some(claseABorrar => claseABorrar.idClase === c.idClase));
-
-                    console.log(`${estudiante.clases[0].idClase}; ${clasesABorrar[0].idClase}`);
-                    
+                    estudiante.clases = estudiante.clases.filter(c => !clasesABorrar.some(claseABorrar => claseABorrar.idClase == c.idClase));                    
                     await this.estudianteRepository.save(estudiante);
                     return true;
                 } else {

@@ -11,7 +11,6 @@ export class EstudiantesClasesController {
     @HttpCode(201)
     createEstudiante(@Param('id') id:number, @Body() datos: DtoEstudiantesClases): Promise<Estudiante> {
     return this.estudianteClaseService.agregarEstudianteClase(id,datos);
-
     }
 
     @Get()

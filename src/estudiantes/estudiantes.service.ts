@@ -64,7 +64,7 @@ export class EstudiantesService {
 
   public async getEstudianteById(id: number): Promise <Estudiante>  {
    try{
-    let criterio: FindOneOptions= {relations: ['direccion'], where: {idEstudiante:id}}
+    let criterio: FindOneOptions= {relations: ['direccion', 'clases'], where: {idEstudiante:id}}
     const estudiante= await this.estudianteRepository.findOne(criterio);
     if (estudiante) return estudiante;
     throw new NotFoundException(`Es estudiante al cual hace referencia el el id ${id} no se encuentra en la base de datos. Verifique los campos ingresados e intente nuevamente`);

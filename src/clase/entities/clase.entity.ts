@@ -23,9 +23,6 @@ escuela:Escuela;
 profesor:Profesor;
 
 
-@ManyToMany(() => Estudiante)
-@JoinTable()
-
 @ManyToMany(() => Estudiante, (estudiante)=> estudiante.clases)
 
 estudiante : Estudiante[];

@@ -38,7 +38,7 @@ constructor(@InjectRepository(Clase) private readonly claseRepository: Repositor
     }
     catch (error) {
       throw new HttpException({status:HttpStatus.NOT_FOUND, 
-        error : 'Error en la creacion de clase '+error}, HttpStatus.NOT_FOUND); 
+        error : 'Error en la lectura de clase '+error}, HttpStatus.NOT_FOUND); 
     }
   }
 

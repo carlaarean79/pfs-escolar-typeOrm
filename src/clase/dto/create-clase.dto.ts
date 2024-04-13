@@ -4,14 +4,13 @@ import { Profesor } from "src/profesor/entities/profesor.entity";
 
 
 export class CreateClaseDto {
-
-    nombre:string; 
+    nombre: string; 
 
     aula: string;
 
-    escuela:Escuela;
+    escuela: Escuela;
 
-    profesor:Profesor;
+    profesor: Profesor;
 
 }
 

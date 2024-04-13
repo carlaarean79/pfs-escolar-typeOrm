@@ -1,34 +1,24 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { AsistenciaService } from './asistencia.service';
 import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
-import { UpdateAsistenciaDto } from './dto/update-asistencia.dto';
+import { Asistencia } from './entities/asistencia.entity';
 
 @Controller('asistencia')
 export class AsistenciaController {
   constructor(private readonly asistenciaService: AsistenciaService) {}
 
   @Post()
-  create(@Body() createAsistenciaDto: CreateAsistenciaDto) {
-    return this.asistenciaService.create(createAsistenciaDto);
+  async registrarAsistencia(@Body() asistenciaDTO: CreateAsistenciaDto): Promise<Asistencia> {
+      return await this.asistenciaService.registrarAsistencia(asistenciaDTO);
   }
 
-  @Get()
-  findAll() {
-    return this.asistenciaService.findAll();
+  @Get('clase/:id')
+  async obtenerAsistenciaPorClase(@Param('id') claseId: number): Promise<Asistencia[]> {
+      return await this.asistenciaService.obtenerAsistenciaPorClase(claseId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.asistenciaService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAsistenciaDto: UpdateAsistenciaDto) {
-    return this.asistenciaService.update(+id, updateAsistenciaDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.asistenciaService.remove(+id);
+  @Get('estudiante/:id')
+  async obtenerAsistenciaPorEstudiante(@Param('id') estudianteId: number): Promise<Asistencia[]> {
+      return await this.asistenciaService.obtenerAsistenciaPorEstudiante(estudianteId);
   }
 }

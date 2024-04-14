@@ -1,3 +1,4 @@
+import { Asistencia } from "src/asistencia/entities/asistencia.entity";
 import { Clase } from "src/clase/entities/clase.entity";
 import { DireccionEstudiante } from "src/direccion-estudiante/entities/direccion-estudiante.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
@@ -24,6 +25,9 @@ export class Estudiante {
     @ManyToMany(() => DireccionEstudiante, direccion => direccion.estudiante)
     @JoinTable({name: 'estudiantes_direcciones'})
     direccion: DireccionEstudiante[];
+
+    @OneToMany(() => Asistencia, asistencia => asistencia.estudiante)
+    asistencias: Asistencia[]; 
 
     constructor(nombre: string, apellido: string, edad: number) {
         this.nombre = nombre;

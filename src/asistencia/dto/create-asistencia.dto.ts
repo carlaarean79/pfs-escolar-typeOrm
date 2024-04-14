@@ -2,14 +2,12 @@ import { IsDate, IsNumber, IsString } from "class-validator";
 
 
 export class CreateAsistenciaDto {
+
 @IsNumber()
-private idAsistencia: number;
+public idClase: number;
 
-@IsString()
-public clase: string;
-
-@IsString()
-public estudiante: string;
+@IsNumber()
+public idEstudiante: number;
 
 @IsDate()
 public fecha: Date;

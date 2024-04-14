@@ -8,9 +8,10 @@ import { Profesor } from 'src/profesor/entities/profesor.entity';
 import { EscuelaService } from 'src/escuela/escuela.service';
 import { ProfesorService } from 'src/profesor/profesor.service';
 import { Estudiante } from 'src/estudiantes/entities/estudiante.entity';
+import { Asistencia } from 'src/asistencia/entities/asistencia.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Clase, Escuela, Profesor, Estudiante])],
+  imports:[TypeOrmModule.forFeature([Clase, Escuela, Profesor, Estudiante, Asistencia])],
   controllers: [ClaseController],
   providers: [ClaseService],
 })

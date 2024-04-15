@@ -6,28 +6,34 @@ import { UserDto } from './dto/userDto.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
+  @Post('register')
   create(@Body() createUserDto: UserDto) {
     return this.userService.create(createUserDto);
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  findAllUser() {
+    return this.userService.findAllUser();
+  }
+//busca un usuario por id 
+  @Get(':id')
+  findOneUser(@Param('id') id: number){
+    return this.userService.findOneUser(id)
   }
 
+  //busca un usuario por id para su autenticacion con email
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() UserDto:UserDto) {
-    return this.userService.update(+id, UserDto);
+  updateUser(@Param('id') id: string, @Body() UserDto:UserDto) {
+    return this.userService.updateUser(+id, UserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  removeUser(@Param('id') id: string) {
+    return this.userService.removeUser(+id);
   }
 }

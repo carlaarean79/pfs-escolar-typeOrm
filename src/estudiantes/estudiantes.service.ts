@@ -67,7 +67,7 @@ export class EstudiantesService {
     let criterio: FindOneOptions= {relations: ['direccion', 'clases'], where: {idEstudiante:id}}
     const estudiante= await this.estudianteRepository.findOne(criterio);
     if (estudiante) return estudiante;
-    throw new NotFoundException(`Es estudiante al cual hace referencia el el id ${id} no se encuentra en la base de datos. Verifique los campos ingresados e intente nuevamente`);
+    throw new NotFoundException(`Es estudiante al cual hace referencia el id ${id} no se encuentra en la base de datos. Verifique los campos ingresados e intente nuevamente`);
    } catch (error){
     throw new HttpException({status: HttpStatus.NOT_FOUND, error: `Se produjo un error al intentar obtener el estudiante con id ${id}. Compruebe los datos ingresados e intente nuevamente`}, 
     HttpStatus.NOT_FOUND);
@@ -88,7 +88,7 @@ export class EstudiantesService {
       }
        } catch (error) {
         throw new HttpException({status: HttpStatus.NOT_FOUND,
-          error: `Se produjo un error inesperado al intentar cargar el nuevo estudiante. error: ${error}`}, HttpStatus.NOT_FOUND
+          error: `Se produjo un error inesperado al intentar modificar el nuevo estudiante. error: ${error}`}, HttpStatus.NOT_FOUND
         )
     }
   }

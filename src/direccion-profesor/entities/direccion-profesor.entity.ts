@@ -1,18 +1,26 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Profesor } from '../../profesor/entities/profesor.entity'; 
 
-@Entity('direccionProfesores')
+@Entity()
 export class DireccionProfesor {
-@PrimaryGeneratedColumn()
-private idDireccionProfesor: number;
+  @PrimaryGeneratedColumn()
+  idDireccionProfesor: number;
 
-@Column()
-    public direccion: string;
+  @Column({ length: 45 })
+  direccion: string;
 
-    constructor(direccion:string){
-        this.direccion=direccion;
-    }
+  @Column()
+  idProfesor: number;
+
+  @Column()
+  idCiudad: number;
+
+  @ManyToOne(() => Profesor, profesor => profesor.direcciones) 
+  profesor: Profesor;
+}
+
 
 //FK PROFESOR
 //FK CIUDAD
 //JOIN
-}
+

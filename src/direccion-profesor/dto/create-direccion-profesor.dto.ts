@@ -1,12 +1,16 @@
-import { IsNumber, IsString } from "class-validator";
+import { IsNumber, IsString, IsInt } from 'class-validator';
 
 export class CreateDireccionProfesorDto {
-@IsNumber()
-idDireccionProfesor: number;
 
-@IsString()
-direccion: string;
+  @IsInt()
+  idDireccionProfesor: number;
+  
+  @IsString()
+  direccion: string;
 
+  @IsNumber()
+  idProfesor: number;
 
-
+  @IsNumber()
+  idCiudad: number;
 }

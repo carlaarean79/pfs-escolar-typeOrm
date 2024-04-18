@@ -35,7 +35,7 @@ import { DireccionEstudiante } from './direccion-estudiante/entities/direccion-e
     username: 'root',
     password: 'root',
     database: 'escolar',
-    entities: [Clase, Estudiante, Profesor,Asistencia, Ciudad, Escuela,DireccionProfesor, DireccionEstudiante, User], //__dirname + "/entity/*{.js,.ts}"
+    entities: [/*Clase, Estudiante, Profesor,Asistencia, Ciudad, Escuela,DireccionProfesor, DireccionEstudiante, */ User], //__dirname + "/entity/*{.js,.ts}"
     synchronize: true,
   }), CiudadModule, EstudiantesModule, ProfesorModule, AsistenciaModule, ClaseModule, EscuelaModule, DireccionProfesorModule, DireccionEstudianteModule, EstudiantesClasesModule, AuthModule, UserModule],
   controllers: [AppController],

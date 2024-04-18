@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, ParseIntPipe } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDto } from './dto/userDto.dto';
 
@@ -17,23 +17,23 @@ export class UserController {
   }
 //busca un usuario por id 
   @Get(':id')
-  findOneUser(@Param('id') id: number){
+  findOneUser(@Param('id', ParseIntPipe) id: number){
     return this.userService.findOneUser(id)
   }
 
   //busca un usuario por id para su autenticacion con email
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
+  findOne(@Param('email') email: string) {
+    return this.userService.findOne(email);
   }
 
-  @Patch(':id')
-  updateUser(@Param('id') id: string, @Body() UserDto:UserDto) {
+  @Put(':id')
+  updateUser(@Param('id', ParseIntPipe) id: number, @Body() UserDto:UserDto) {
     return this.userService.updateUser(+id, UserDto);
   }
 
   @Delete(':id')
-  removeUser(@Param('id') id: string) {
+  removeUser(@Param('id',ParseIntPipe) id: number) {
     return this.userService.removeUser(+id);
   }
 }

@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { Role } from "../Rol/rol.enum";
+import { MinLength } from "class-validator";
 
 @Entity('users') // nombre de la tabla
 export class User {
@@ -16,6 +17,7 @@ export class User {
     email: string
 
     @Column()
+    @MinLength(6)
     password: string
 
     @Column({ type: 'enum', enum: Role, default:Role.User })

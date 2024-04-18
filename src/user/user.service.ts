@@ -78,6 +78,11 @@ export class UserService {
     if (userData.role && ![Role.User, Role.Admin].includes(userData.role)) {
         throw new HttpException('El rol proporcionado no es válido', HttpStatus.BAD_REQUEST);
     }
+// Verificar si el correo electrónico ya está en uso
+const existingUser = await this.userRepo.findOne({ where: { email: userData.email } });
+if (existingUser) {
+    throw new HttpException('El correo electrónico ya está en uso', HttpStatus.CONFLICT);
+}
 
     // Crear el usuario
     try {

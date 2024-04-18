@@ -1,10 +1,10 @@
 import { IsNumber, IsString } from "class-validator";
 
 export class CreateProfesorDto {
-    @IsNumber()
+
     idProfesor: number;
 
-    @IsString()
+    @IsNumber()
     nombre: string;
 
     @IsString()

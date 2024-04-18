@@ -1,34 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 import { DireccionProfesorService } from './direccion-profesor.service';
 import { CreateDireccionProfesorDto } from './dto/create-direccion-profesor.dto';
-import { UpdateDireccionProfesorDto } from './dto/update-direccion-profesor.dto';
+import { DireccionProfesor } from './entities/direccion-profesor.entity';
 
 @Controller('direccion-profesor')
 export class DireccionProfesorController {
   constructor(private readonly direccionProfesorService: DireccionProfesorService) {}
 
   @Post()
-  create(@Body() createDireccionProfesorDto: CreateDireccionProfesorDto) {
-    return this.direccionProfesorService.create(createDireccionProfesorDto);
+  async create(@Body() createDireccionProfesorDto: CreateDireccionProfesorDto): Promise<DireccionProfesor> {
+    return this.direccionProfesorService.createDireccionProfesor(createDireccionProfesorDto);
   }
 
   @Get()
-  findAll() {
-    return this.direccionProfesorService.findAll();
+  async findAll(): Promise<DireccionProfesor[]> {
+    return this.direccionProfesorService.getAllDireccionesProfesor();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.direccionProfesorService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDireccionProfesorDto: UpdateDireccionProfesorDto) {
-    return this.direccionProfesorService.update(+id, updateDireccionProfesorDto);
+  async findOne(@Param('id') id: string): Promise<DireccionProfesor> {
+    return this.direccionProfesorService.getDireccionProfesorById(+id);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.direccionProfesorService.remove(+id);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async remove(@Param('id') id: string): Promise<void> {
+    await this.direccionProfesorService.deleteDireccionProfesor(+id);
   }
 }
